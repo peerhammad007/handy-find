@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../types/User";
 import { Booking } from "../../types/Booking";
-import { stat } from "fs";
 
 interface usersState {
     profile: User | null;

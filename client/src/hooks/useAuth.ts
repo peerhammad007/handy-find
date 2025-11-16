@@ -15,7 +15,18 @@ export const useAuth = () => {
       const data = await loginApi({ email, password });
       dispatch(loginSuccess(data));
       localStorage.setItem('token', data.token);
-      navigate('/');
+      // persist user so app can rehydrate auth after refresh
+      try {
+        localStorage.setItem('user', JSON.stringify(data.user));
+      } catch (e) {
+        // ignore storage errors
+      }
+      // Redirect based on user role
+      if (data.user.role === 'provider') {
+        navigate('/dashboard');
+      } else {
+        navigate('/profile');
+      }
     } catch (err: any) {
       dispatch(loginFailure(err.response?.data?.message || 'Login failed'));
     }
@@ -35,6 +46,7 @@ export const useAuth = () => {
   const signOut = () => {
     dispatch(logout());
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   return { user, token, loading, error, login, register, signOut };
