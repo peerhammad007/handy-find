@@ -18,11 +18,11 @@ function Navbar() {
                             <>
                                 <Link to="/services" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Services</Link>
                                 <Link to="/booking" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Bookings</Link>
-                                <Link to="/reviews" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Reviews</Link>
                                 <Link to="/profile" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Profile</Link>
                                 {/* Provider-only links */}
                                 {user?.role === "provider" && (
                                     <>
+                                        <Link to="/reviews" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Reviews</Link>
                                         <Link to="/dashboard" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Dashboard</Link>
                                         <Link to="/my-services" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">My Services</Link>
                                     </>

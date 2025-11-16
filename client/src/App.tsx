@@ -11,6 +11,8 @@ import Booking from './pages/BookingPage/Booking';
 import Profile from './pages/ProfilePage/Profile';
 import Reviews from './pages/ReviewsPage/Reviews';
 import Footer from './layouts/Footer';
+import PrivateRoute from './components/PrivateRoute';
+import MyServices from './pages/MyServicesPage/MyServices';
 
 const ErrorPage = () => <div>404 - Page Not Found</div>;
 
@@ -19,16 +21,19 @@ function App() {
     <Router>
       <Navbar />
 
-      <div style={{minHeight: "80vh"}}>
+      <div style={{ minHeight: "80vh" }}>
         <Routes>
           <Route path='/' element={<Home />} />
-          <Route path='/login' element={<Login />}/>
-          <Route path='/register' element={<Register />}/>
-          <Route path='/dashboard' element={<Dashboard />}/>
-          <Route path='/services' element={<ServiceListings />}/>
-          <Route path='/booking' element={<Booking />}/>
-          <Route path='/profile' element={<Profile />}/>
-          <Route path='/reviews' element={<Reviews />}/>
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/services' element={<ServiceListings />} />
+            <Route path='/my-services' element={<MyServices />} />
+            <Route path='/booking' element={<Booking />} />
+            <Route path='/profile' element={<Profile />} />
+            <Route path='/reviews' element={<Reviews />} />
+          </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>
       </div>
