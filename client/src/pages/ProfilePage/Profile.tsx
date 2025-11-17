@@ -41,19 +41,24 @@ function Profile() {
         <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow">
             <h2 className="text-2xl font-bold mb-4">Profile</h2>
             {!editing ? (
-                <div>
-                    <p><strong>Name:</strong> {profile.name}</p>
-                    <p><strong>Email:</strong> {profile.email}</p>
-                    <p><strong>Role:</strong> {profile.role}</p>
-                    <p><strong>Phone:</strong> {profile.phone}</p>
-                    <p><strong>Location:</strong> {profile.location}</p>
-                    <p><strong>Bio:</strong> {profile.bio}</p>
+                <>
+                    <div className="flex gap-4 items-center">
+                        <img src={profile.profilePhoto || '/default-avatar.png'} alt="avatar" className="w-24 h-24 rounded-full object-cover" />
+                        <div>
+                            <p><strong>Name:</strong> {profile.name}</p>
+                            <p><strong>Email:</strong> {profile.email}</p>
+                            <p><strong>Role:</strong> {profile.role}</p>
+                            <p><strong>Phone:</strong> {profile.phone}</p>
+                            <p><strong>Location:</strong> {profile.location}</p>
+                            <p><strong>Bio:</strong> {profile.bio}</p>
+                        </div>
+                    </div>
                     <div className="mt-4 flex gap-2">
                         <button onClick={() => setEditing(true)} className="bg-blue-600 text-white px-3 py-1 rounded">Edit</button>
                         <button onClick={() => signOut()} className="bg-gray-300 px-3 py-1 rounded">Logout</button>
                         {profile.role === 'provider' && <Link to="/my-services" className="bg-green-600 text-white px-3 py-1 rounded">My Services</Link>}
                     </div>
-                </div>
+                </>
             ) : (
                 <div className="grid gap-2">
                     <input name="name" value={form.name} onChange={handleChange} className="border p-2 rounded" />

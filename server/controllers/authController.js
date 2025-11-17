@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res) => {
   try {
-    const { name, email, phone, password, role, location, serviceCategories, bio } = req.body;
+    const { name, email, phone, password, role, location, serviceCategories, bio, profilePhoto } = req.body;
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already exists' });
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -13,6 +13,7 @@ exports.register = async (req, res) => {
       email,
       phone,
       password: hashedPassword,
+      profilePhoto: profilePhoto || undefined,
       role,
       location,
       serviceCategories: role === 'provider' ? serviceCategories : [],

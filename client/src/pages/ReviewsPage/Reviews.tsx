@@ -32,6 +32,12 @@ function Reviews() {
         );
     }
 
+    const renderStars = (rating: number) => {
+        const full = '★'.repeat(Math.max(0, Math.min(5, Math.round(rating))));
+        const empty = '☆'.repeat(5 - full.length);
+        return <span className="text-yellow-500">{full}{empty}</span>;
+    };
+
     return (
         <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow">
             <h2 className="text-2xl font-bold mb-4">Reviews for Your Services</h2>
@@ -42,7 +48,7 @@ function Reviews() {
                         <strong>{r.user?.name}</strong>
                         <span className="text-sm text-gray-600">{r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ''}</span>
                     </div>
-                    <div className="text-sm">Rating: {r.rating}</div>
+                    <div className="text-sm">Rating: {renderStars(r.rating)}</div>
                     <div className="text-sm text-gray-700">{r.comment}</div>
                 </div>
             ))}

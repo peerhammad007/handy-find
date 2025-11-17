@@ -4,7 +4,7 @@ import { getBookings as apiGetBookings, updateBookingStatus as apiUpdateBookingS
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { fetchBookingsStart, fetchBookingsSuccess, fetchBookingsFailure, updateBookingStatus } from '../../features/bookings/bookingsSlice';
-import { createReview as apiCreateReview } from '../../api/reviewApi';
+import { createReview as apiCreateReview, getReviewByBooking } from '../../api/reviewApi';
 
 function Booking() {
     const { user } = useAuth();
@@ -15,8 +15,14 @@ function Booking() {
     const [openReviewId, setOpenReviewId] = useState<string | null>(null);
     const [reviewRating, setReviewRating] = useState<number>(5);
     const [reviewComment, setReviewComment] = useState<string>('');
-    // null = not yet loaded, object = map of bookingId -> reviewed boolean
-    const [reviewedIds, setReviewedIds] = useState<Record<string, boolean> | null>(null);
+    // null = not yet loaded, otherwise map bookingId -> rating number
+    const [reviewedMap, setReviewedMap] = useState<Record<string, number> | null>(null);
+
+    const renderStars = (rating: number) => {
+        const full = '★'.repeat(Math.max(0, Math.min(5, Math.round(rating))));
+        const empty = '☆'.repeat(5 - full.length);
+        return <span className="text-yellow-500">{full}{empty}</span>;
+    };
 
     useEffect(() => {
         const load = async () => {
@@ -27,20 +33,17 @@ function Booking() {
                 // determine which bookings already have reviews (for users)
                 if (user?.role === 'user') {
                     const completed = res.filter((b: any) => b.status === 'completed');
-                    const checks = await Promise.all(completed.map((b: any) =>
-                        // returns 200 if exists, 404 if not
-                        (async () => {
-                            try {
-                                await (await import('../../api/reviewApi')).getReviewByBooking(b._id);
-                                return { id: b._id, reviewed: true };
-                            } catch (e: any) {
-                                return { id: b._id, reviewed: false };
-                            }
-                        })()
-                    ));
-                    const map: Record<string, boolean> = {};
-                    checks.forEach((c: any) => { map[c.id] = c.reviewed; });
-                    setReviewedIds(map);
+                    const checks = await Promise.all(completed.map(async (b: any) => {
+                        try {
+                            const review = await getReviewByBooking(b._id);
+                            return { id: b._id, rating: review.rating };
+                        } catch (e: any) {
+                            return { id: b._id, rating: null };
+                        }
+                    }));
+                    const map: Record<string, number> = {};
+                    checks.forEach((c: any) => { if (c.rating !== null && c.rating !== undefined) map[c.id] = c.rating; });
+                    setReviewedMap(map);
                 }
             } catch (err: any) {
                 dispatch(fetchBookingsFailure(err.message || 'Failed to load bookings'));
@@ -77,6 +80,9 @@ function Booking() {
                                 <div><strong>Service:</strong> {serviceLabel}</div>
                                 <div><strong>Date:</strong> {b.date} <strong>Slot:</strong> {b.slot}</div>
                                 <div><strong>Status:</strong> {b.status}</div>
+                                {reviewedMap && b._id in reviewedMap && (
+                                    <div className="mt-1"><strong>Rating:</strong> {renderStars(reviewedMap[b._id])}</div>
+                                )}
                                 {user?.role === 'provider' && (
                                   <div><strong>Booker:</strong> {userLabel}{userPhone ? ` — ${userPhone}` : ''}</div>
                                 )}
@@ -88,7 +94,7 @@ function Booking() {
                                         {b.status === 'accepted' && <button onClick={() => handleUpdate(b._id, 'completed')} className="bg-blue-600 text-white px-3 py-1 rounded">Mark Completed</button>}
                                     </>
                                 )}
-                                                {user?.role === 'user' && b.status === 'completed' && reviewedIds !== null && !reviewedIds[b._id] && (
+                                                {user?.role === 'user' && b.status === 'completed' && reviewedMap !== null && !(b._id in reviewedMap) && (
                                     <>
                                         {!openReviewId || openReviewId !== b._id ? (
                                             <button onClick={() => { setOpenReviewId(b._id); setReviewRating(5); setReviewComment(''); }} className="bg-yellow-500 text-white px-3 py-1 rounded">Write Review</button>
@@ -100,14 +106,14 @@ function Booking() {
                                                 <textarea placeholder="Comment" value={reviewComment} onChange={e => setReviewComment(e.target.value)} className="block w-full border p-2 rounded mb-2" />
                                                 <div className="flex gap-2">
                                                     <button onClick={async () => {
-                                                        try {
-                                                            await apiCreateReview({ bookingId: b._id, rating: reviewRating, comment: reviewComment });
-                                                            alert('Review submitted');
-                                                            setReviewedIds(prev => ({ ...(prev || {}), [b._id]: true }));
-                                                            setOpenReviewId(null);
-                                                        } catch (err: any) {
-                                                            alert(err.response?.data?.message || 'Failed to submit review');
-                                                        }
+                                                            try {
+                                                                await apiCreateReview({ bookingId: b._id, rating: reviewRating, comment: reviewComment });
+                                                                alert('Review submitted');
+                                                                setReviewedMap(prev => ({ ...(prev || {}), [b._id]: reviewRating }));
+                                                                setOpenReviewId(null);
+                                                            } catch (err: any) {
+                                                                alert(err.response?.data?.message || 'Failed to submit review');
+                                                            }
                                                     }} className="bg-green-600 text-white px-3 py-1 rounded">Submit</button>
                                                     <button onClick={() => setOpenReviewId(null)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
                                                 </div>
