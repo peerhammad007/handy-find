@@ -16,7 +16,9 @@ function Navbar() {
                     <div className="flex space-x-4">
                         {token && (
                             <>
-                                <Link to="/services" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Services</Link>
+                                {user?.role === "user" && (
+                                    <Link to="/services" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Services</Link>
+                                )}
                                 <Link to="/booking" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Bookings</Link>
                                 <Link to="/profile" className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded transition">Profile</Link>
                                 {/* Provider-only links */}

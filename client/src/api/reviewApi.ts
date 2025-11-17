@@ -17,5 +17,10 @@ export const getReviewsForProvider = async (providerId: string) => {
   return res.data as Review[];
 };
 
+export const getReviewByBooking = async (bookingId: string) => {
+  const res = await http.get(`${API_BASE_URL}/reviews/booking/${bookingId}`);
+  return res.data as Review;
+};
+
 export default { createReview, getReviewsForService, getReviewsForProvider };
 export {};
