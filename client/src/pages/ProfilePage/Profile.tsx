@@ -35,43 +35,61 @@ function Profile() {
         }
     };
 
-    if (!profile) return <div className="max-w-4xl mx-auto mt-12 p-6">Loading profile...</div>;
+    if (!profile) {
+        return (
+            <div className="min-h-screen bg-sky-50 pt-20">
+                <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">Loading profile...</div>
+            </div>
+        );
+    }
 
     return (
-        <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow">
-            <h2 className="text-2xl font-bold mb-4">Profile</h2>
-            {!editing ? (
-                <>
-                    <div className="flex gap-4 items-center">
-                        <img src={profile.profilePhoto || '/default-avatar.png'} alt="avatar" className="w-24 h-24 rounded-full object-cover" />
-                        <div>
-                            <p><strong>Name:</strong> {profile.name}</p>
-                            <p><strong>Email:</strong> {profile.email}</p>
-                            <p><strong>Role:</strong> {profile.role}</p>
-                            <p><strong>Phone:</strong> {profile.phone}</p>
-                            <p><strong>Location:</strong> {profile.location}</p>
-                            <p><strong>Bio:</strong> {profile.bio}</p>
+        <div className="min-h-screen bg-sky-50 pt-20">
+            <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
+                <h2 className="text-2xl font-bold mb-4">Profile</h2>
+
+                {!editing ? (
+                    <>
+                        <div className="grid sm:grid-cols-3 gap-4 items-start">
+                            <div className="sm:col-span-1 bg-white p-4 rounded-lg shadow-sm flex flex-col items-center">
+                                <img src={profile.profilePhoto || '/default-avatar.png'} alt="avatar" className="w-28 h-28 rounded-full object-cover mb-3" />
+                                <div className="text-center">
+                                    <div className="font-semibold text-lg">{profile.name}</div>
+                                    <div className="text-sm text-gray-600">{profile.role}</div>
+                                </div>
+                            </div>
+
+                            <div className="sm:col-span-2 bg-white p-4 rounded-lg shadow-sm">
+                                <div className="grid grid-cols-1 gap-2">
+                                    <div><span className="font-medium">Email:</span> <span className="text-gray-700">{profile.email}</span></div>
+                                    <div><span className="font-medium">Phone:</span> <span className="text-gray-700">{profile.phone}</span></div>
+                                    <div><span className="font-medium">Location:</span> <span className="text-gray-700">{profile.location}</span></div>
+                                    <div><span className="font-medium">Bio:</span> <span className="text-gray-700">{profile.bio}</span></div>
+                                </div>
+
+                                <div className="mt-4 flex gap-2 justify-end">
+                                    <button onClick={() => setEditing(true)} className="bg-blue-600 text-white px-4 py-2 rounded-md">Edit</button>
+                                    <button onClick={() => signOut()} className="bg-gray-300 px-4 py-2 rounded-md">Logout</button>
+                                    {profile.role === 'provider' && <Link to="/my-services" className="bg-green-600 text-white px-4 py-2 rounded-md">My Services</Link>}
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="grid gap-2">
+                        <input name="name" value={form.name} onChange={handleChange} className="border p-2 rounded" />
+                        <input name="phone" value={form.phone} onChange={handleChange} className="border p-2 rounded" />
+                        <input name="location" value={form.location} onChange={handleChange} className="border p-2 rounded" />
+                        <textarea name="bio" value={form.bio} onChange={handleChange} className="border p-2 rounded" />
+                        <div className="flex gap-2">
+                            <button onClick={handleSave} className="bg-green-600 text-white px-3 py-1 rounded">Save</button>
+                            <button onClick={() => setEditing(false)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
                         </div>
                     </div>
-                    <div className="mt-4 flex gap-2">
-                        <button onClick={() => setEditing(true)} className="bg-blue-600 text-white px-3 py-1 rounded">Edit</button>
-                        <button onClick={() => signOut()} className="bg-gray-300 px-3 py-1 rounded">Logout</button>
-                        {profile.role === 'provider' && <Link to="/my-services" className="bg-green-600 text-white px-3 py-1 rounded">My Services</Link>}
-                    </div>
-                </>
-            ) : (
-                <div className="grid gap-2">
-                    <input name="name" value={form.name} onChange={handleChange} className="border p-2 rounded" />
-                    <input name="phone" value={form.phone} onChange={handleChange} className="border p-2 rounded" />
-                    <input name="location" value={form.location} onChange={handleChange} className="border p-2 rounded" />
-                    <textarea name="bio" value={form.bio} onChange={handleChange} className="border p-2 rounded" />
-                    <div className="flex gap-2">
-                        <button onClick={handleSave} className="bg-green-600 text-white px-3 py-1 rounded">Save</button>
-                        <button onClick={() => setEditing(false)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }
+
 export default Profile;

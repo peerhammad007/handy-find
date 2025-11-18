@@ -62,71 +62,86 @@ function Booking() {
         }
     };
 
-    if (loading) return <div className="max-w-4xl mx-auto mt-12 p-6">Loading bookings...</div>;
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-sky-50 pt-20">
+                <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">Loading bookings...</div>
+            </div>
+        );
+    }
 
     return (
-        <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow">
-            <h2 className="text-2xl font-bold mb-4">Bookings</h2>
-            {error && <div className="text-red-600">{error}</div>}
-            <div className="grid gap-4">
-                {bookings.map(b => {
-                    const serviceLabel = typeof b.service === 'object' ? (b.service as any)?.title || (b.service as any)?._id : b.service;
-                    const userLabel = typeof b.user === 'object' ? (b.user as any)?.name || (b.user as any)?._id : b.user;
-                    const userPhone = typeof b.user === 'object' ? (b.user as any)?.phone : undefined;
+        <div className="min-h-screen bg-sky-50 pt-20">
+            <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
+                <h2 className="text-2xl font-bold mb-4">Bookings</h2>
+                {error && <div className="text-red-600">{error}</div>}
 
-                    return (
-                        <div key={b._id} className="border p-3 rounded flex justify-between items-center">
-                            <div>
-                                <div><strong>Service:</strong> {serviceLabel}</div>
-                                <div><strong>Date:</strong> {b.date} <strong>Slot:</strong> {b.slot}</div>
-                                <div><strong>Status:</strong> {b.status}</div>
-                                {reviewedMap && b._id in reviewedMap && (
-                                    <div className="mt-1"><strong>Rating:</strong> {renderStars(reviewedMap[b._id])}</div>
-                                )}
-                                {user?.role === 'provider' && (
-                                  <div><strong>Booker:</strong> {userLabel}{userPhone ? ` — ${userPhone}` : ''}</div>
-                                )}
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                {user?.role === 'provider' && (
-                                    <>
-                                        {b.status === 'pending' && <button onClick={() => handleUpdate(b._id, 'accepted')} className="bg-green-600 text-white px-3 py-1 rounded">Accept</button>}
-                                        {b.status === 'accepted' && <button onClick={() => handleUpdate(b._id, 'completed')} className="bg-blue-600 text-white px-3 py-1 rounded">Mark Completed</button>}
-                                    </>
-                                )}
-                                                {user?.role === 'user' && b.status === 'completed' && reviewedMap !== null && !(b._id in reviewedMap) && (
-                                    <>
-                                        {!openReviewId || openReviewId !== b._id ? (
-                                            <button onClick={() => { setOpenReviewId(b._id); setReviewRating(5); setReviewComment(''); }} className="bg-yellow-500 text-white px-3 py-1 rounded">Write Review</button>
+                <div className="grid gap-4">
+                    {bookings.map((b: any) => {
+                        const serviceLabel = typeof b.service === 'object' ? (b.service as any)?.title || (b.service as any)?._id : b.service;
+                        const userLabel = typeof b.user === 'object' ? (b.user as any)?.name || (b.user as any)?._id : b.user;
+                        const userPhone = typeof b.user === 'object' ? (b.user as any)?.phone : undefined;
+
+                        return (
+                            <div key={b._id} className="bg-white p-4 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start gap-4">
+                                <div className="flex-1 space-y-1">
+                                    <div className="text-sm text-gray-500">Service</div>
+                                    <div className="text-lg font-semibold text-gray-900">{serviceLabel}</div>
+                                    <div className="text-sm text-gray-600">{b.date} • <span className="font-medium">{b.slot}</span></div>
+                                    <div className="inline-flex items-center gap-2 mt-1">
+                                        <span className="px-2 py-0.5 rounded-full text-sm font-medium bg-sky-50 text-sky-700 border border-sky-100">{b.status}</span>
+                                        {reviewedMap && b._id in reviewedMap && (
+                                            <span className="text-sm text-yellow-500">{renderStars(reviewedMap[b._id])}</span>
+                                        )}
+                                        {user?.role === 'provider' && (
+                                            <div className="text-sm text-gray-600">Booked by <span className="font-medium">{userLabel}</span>{userPhone ? ` • ${userPhone}` : ''}</div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col sm:items-end gap-2">
+                                    <div className="flex flex-col sm:flex-row gap-2">
+                                        {user?.role === 'provider' && b.status === 'pending' && (
+                                            <button onClick={() => handleUpdate(b._id, 'accepted')} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">Accept</button>
+                                        )}
+                                        {user?.role === 'provider' && b.status === 'accepted' && (
+                                            <button onClick={() => handleUpdate(b._id, 'completed')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Mark Completed</button>
+                                        )}
+                                    </div>
+
+                                    {user?.role === 'user' && b.status === 'completed' && reviewedMap !== null && !(b._id in reviewedMap) && (
+                                        !openReviewId || openReviewId !== b._id ? (
+                                            <button onClick={() => { setOpenReviewId(b._id); setReviewRating(5); setReviewComment(''); }} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md">Write Review</button>
                                         ) : (
-                                            <div className="p-2 border rounded bg-gray-50">
-                                                <select value={reviewRating} onChange={e => setReviewRating(Number(e.target.value))} className="border p-1 rounded mb-2">
+                                            <div className="w-full sm:w-[320px] p-3 bg-gray-50 rounded">
+                                                <select value={reviewRating} onChange={e => setReviewRating(Number(e.target.value))} className="w-full border p-2 rounded mb-2">
                                                     {[5,4,3,2,1].map(v => <option key={v} value={v}>{v}</option>)}
                                                 </select>
                                                 <textarea placeholder="Comment" value={reviewComment} onChange={e => setReviewComment(e.target.value)} className="block w-full border p-2 rounded mb-2" />
-                                                <div className="flex gap-2">
+                                                <div className="flex gap-2 justify-end">
                                                     <button onClick={async () => {
-                                                            try {
-                                                                await apiCreateReview({ bookingId: b._id, rating: reviewRating, comment: reviewComment });
-                                                                alert('Review submitted');
-                                                                setReviewedMap(prev => ({ ...(prev || {}), [b._id]: reviewRating }));
-                                                                setOpenReviewId(null);
-                                                            } catch (err: any) {
-                                                                alert(err.response?.data?.message || 'Failed to submit review');
-                                                            }
+                                                        try {
+                                                            await apiCreateReview({ bookingId: b._id, rating: reviewRating, comment: reviewComment });
+                                                            alert('Review submitted');
+                                                            setReviewedMap(prev => ({ ...(prev || {}), [b._id]: reviewRating }));
+                                                            setOpenReviewId(null);
+                                                        } catch (err: any) {
+                                                            alert(err.response?.data?.message || 'Failed to submit review');
+                                                        }
                                                     }} className="bg-green-600 text-white px-3 py-1 rounded">Submit</button>
                                                     <button onClick={() => setOpenReviewId(null)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
                                                 </div>
                                             </div>
-                                        )}
-                                    </>
-                                )}
+                                        )
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );
 }
+
 export default Booking;

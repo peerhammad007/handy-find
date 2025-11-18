@@ -53,47 +53,51 @@ const Dashboard: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="max-w-2xl mx-auto mt-12 p-6 bg-white rounded shadow text-center">
-        <h2 className="text-xl font-semibold mb-2">Dashboard</h2>
-        <p className="text-gray-600">Please log in to view your dashboard.</p>
+      <div className="min-h-screen bg-sky-50 pt-20">
+        <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg text-center">
+          <h2 className="text-xl font-semibold mb-2">Dashboard</h2>
+          <p className="text-gray-600">Please log in to view your dashboard.</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto mt-12 p-6 bg-white rounded shadow">
-      <h2 className="text-2xl font-bold mb-4 text-blue-600">Welcome, {user.name}!</h2>
-      <p className="mb-8 text-gray-600">Manage your services, bookings, and see your performance at a glance.</p>
+    <div className="min-h-screen bg-sky-50 pt-20">
+      <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
+        <h2 className="text-2xl font-bold mb-4 text-blue-600">Welcome, {user.name}!</h2>
+        <p className="mb-8 text-gray-600">Manage your services, bookings, and see your performance at a glance.</p>
 
-      {loading ? (
-        <div>Loading stats...</div>
-      ) : error ? (
-        <div className="text-red-600">{error}</div>
-      ) : (
-        <div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-            <Link to="/my-services" className="bg-gray-50 hover:bg-blue-50 rounded-lg p-6 flex flex-col items-center shadow transition">
-              <span className="text-3xl font-bold text-blue-600 mb-2">{myServicesCount}</span>
-              <span className="text-gray-700">My Services</span>
-            </Link>
+        {loading ? (
+          <div>Loading stats...</div>
+        ) : error ? (
+          <div className="text-red-600">{error}</div>
+        ) : (
+          <div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+              <Link to="/my-services" className="bg-white border border-sky-100 p-6 rounded-lg shadow-sm flex flex-col items-center transition hover:shadow-md">
+                <span className="text-4xl font-extrabold text-blue-600 mb-2">{myServicesCount}</span>
+                <span className="text-gray-700">My Services</span>
+              </Link>
 
-            <Link to="/booking" className="bg-gray-50 hover:bg-blue-50 rounded-lg p-6 flex flex-col items-center shadow transition">
-              <span className="text-3xl font-bold text-blue-600 mb-2">{totalBookings}</span>
-              <span className="text-gray-700">Total Bookings</span>
-            </Link>
+              <Link to="/booking" className="bg-white border border-sky-100 p-6 rounded-lg shadow-sm flex flex-col items-center transition hover:shadow-md">
+                <span className="text-4xl font-extrabold text-blue-600 mb-2">{totalBookings}</span>
+                <span className="text-gray-700">Total Bookings</span>
+              </Link>
 
-            <Link to="/reviews" className="bg-gray-50 hover:bg-blue-50 rounded-lg p-6 flex flex-col items-center shadow transition">
-              <span className="text-3xl font-bold text-blue-600 mb-2">{avgRating !== null ? avgRating : '—'}</span>
-              <span className="text-gray-700">Avg. Rating</span>
-            </Link>
+              <Link to="/reviews" className="bg-white border border-sky-100 p-6 rounded-lg shadow-sm flex flex-col items-center transition hover:shadow-md">
+                <span className="text-4xl font-extrabold text-blue-600 mb-2">{avgRating !== null ? avgRating : '—'}</span>
+                <span className="text-gray-700">Avg. Rating</span>
+              </Link>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link to="/my-services" className="bg-sky-50 text-sky-700 px-6 py-3 rounded-md text-center hover:bg-sky-100 transition">View My Services</Link>
+              <Link to="/booking" className="bg-sky-50 text-sky-700 px-6 py-3 rounded-md text-center hover:bg-sky-100 transition">View Bookings</Link>
+            </div>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link to="/my-services" className="bg-gray-100 text-blue-600 px-6 py-3 rounded-md text-center hover:bg-blue-100 transition">View My Services</Link>
-            <Link to="/booking" className="bg-gray-100 text-blue-600 px-6 py-3 rounded-md text-center hover:bg-blue-100 transition">View Bookings</Link>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

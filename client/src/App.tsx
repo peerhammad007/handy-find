@@ -7,12 +7,15 @@ import Login from './pages/LoginPage/Login';
 import Register from './pages/RegisterPage/Register';
 import Dashboard from './pages/DashboardPage/Dashboard';
 import ServiceListings from './pages/ServiceListingsPage/ServiceListings';
+import HowItWorks from './components/Info/HowItWorks';
+import ContactUs from './components/Info/ContactUs';
 import Booking from './pages/BookingPage/Booking';
 import Profile from './pages/ProfilePage/Profile';
 import Reviews from './pages/ReviewsPage/Reviews';
 import Footer from './layouts/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import MyServices from './pages/MyServicesPage/MyServices';
+import ServicesInfo from './components/Info/ServicesInfo';
 
 const ErrorPage = () => <div>404 - Page Not Found</div>;
 
@@ -24,6 +27,9 @@ function App() {
       <div style={{ minHeight: "80vh" }}>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/services-info' element={<ServicesInfo />} />
+          <Route path='/how-it-works' element={<HowItWorks />} />
+          <Route path='/contact-us' element={<ContactUs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route element={<PrivateRoute />}>

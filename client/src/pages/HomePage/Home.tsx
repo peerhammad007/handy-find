@@ -3,44 +3,37 @@ import { Link } from "react-router-dom";
 
 function Home() {
     return (
-        <main className="min-h-screen bg-gray-50">
-            <section className="bg-white">
-                <div className="max-w-7xl mx-auto px-6 py-16 text-center">
-                    <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900">Find trusted local services, fast</h1>
-                    <p className="mt-4 text-gray-600 max-w-2xl mx-auto">Connect with nearby plumbers, electricians, cleaners and more — book trusted local professionals in just a few taps.</p>
+        <main className="min-h-screen bg-white">
+            <section className="relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-sky-50 to-white" />
+                    <div className="relative max-w-6xl mx-auto px-6 py-28">
+                        <div className="bg-white/70 backdrop-blur-sm rounded-2xl p-10 shadow-md text-center">
+                            <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900">Find reliable help, fast.</h1>
+                            <p className="mt-3 text-lg text-gray-600 max-w-2xl mx-auto">Connect with trusted local service providers for any job, anytime.</p>
 
-                    <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="rounded-lg overflow-hidden shadow-sm">
-                            <img src="https://images.unsplash.com/photo-1686178827149-6d55c72d81df?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8aG9tZSUyMHNlcnZpY2VzfGVufDB8fDB8fHww" alt="home repairs" className="w-full h-48 object-cover" />
-                            <div className="p-4 text-left">
-                                <h3 className="font-semibold">Home Repairs</h3>
-                                <p className="text-sm text-gray-600">Plumbing, carpentry and general fixes.</p>
+                            <div className="mt-8">
+                                <Link to="/services" className="inline-block bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-full text-base font-medium shadow">Find Services Near You</Link>
                             </div>
-                        </div>
-                        <div className="rounded-lg overflow-hidden shadow-sm">
-                            <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?q=80&w=1200&auto=format&fit=crop" alt="electrical" className="w-full h-48 object-cover" />
-                            <div className="p-4 text-left">
-                                <h3 className="font-semibold">Electrical Work</h3>
-                                <p className="text-sm text-gray-600">Certified electricians for installations and repairs.</p>
-                            </div>
-                        </div>
-                        <div className="rounded-lg overflow-hidden shadow-sm">
-                            <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1200&auto=format&fit=crop" alt="cleaning" className="w-full h-48 object-cover" />
-                            <div className="p-4 text-left">
-                                <h3 className="font-semibold">Cleaning & Services</h3>
-                                <p className="text-sm text-gray-600">Regular or deep-clean services from trusted pros.</p>
+
+                            <div className="mt-10 flex items-center justify-center gap-10">
+                                <div className="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-10 w-10 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c1.657 0 3-1.567 3-3.5S13.657 1 12 1 9 2.567 9 4.5 10.343 8 12 8zM6 22v-2a4 4 0 014-4h4a4 4 0 014 4v2" /></svg>
+                                    <p className="mt-2 font-semibold">For Clients</p>
+                                    <p className="text-sm text-gray-600">Browse, Book & Review</p>
+                                </div>
+                                <div className="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-10 w-10 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0-3.866-3.582-7-8-7m16 14v-6a4 4 0 00-4-4H6" /></svg>
+                                    <p className="mt-2 font-semibold">For Providers</p>
+                                    <p className="text-sm text-gray-600">List, Manage & Get Hired</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div className="mt-8 flex items-center justify-center gap-4">
-                        <Link to="/login" className="bg-blue-600 text-white px-6 py-3 rounded-md">Login</Link>
-                        <Link to="/register" className="bg-green-600 text-white px-6 py-3 rounded-md">Register</Link>
-                    </div>
-                </div>
+                {/* subtle decorative circle */}
+                <div className="hidden md:block absolute -right-24 -top-24 w-72 h-72 bg-sky-100 rounded-full opacity-60 transform rotate-12" />
             </section>
 
-            <section className="max-w-7xl mx-auto px-6 py-12">
+            <section className="max-w-6xl mx-auto px-6 py-12">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                     <div className="bg-white p-6 rounded-lg shadow-sm">
                         <h3 className="font-semibold text-lg">Browse Services</h3>
