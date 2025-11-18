@@ -15,6 +15,8 @@ function Booking() {
     const [openReviewId, setOpenReviewId] = useState<string | null>(null);
     const [reviewRating, setReviewRating] = useState<number>(5);
     const [reviewComment, setReviewComment] = useState<string>('');
+        const [openRejectId, setOpenRejectId] = useState<string | null>(null);
+        const [rejectComment, setRejectComment] = useState<string>('');
     // null = not yet loaded, otherwise map bookingId -> rating number
     const [reviewedMap, setReviewedMap] = useState<Record<string, number> | null>(null);
 
@@ -53,10 +55,10 @@ function Booking() {
         load();
     }, [dispatch]);
 
-    const handleUpdate = async (id: string, status: any) => {
+    const handleUpdate = async (id: string, status: any, comment?: string) => {
         try {
-            await apiUpdateBookingStatus(id, status);
-            dispatch(updateBookingStatus({ id, status }));
+            await apiUpdateBookingStatus(id, status, comment);
+            dispatch(updateBookingStatus({ id, status, rejectionComment: comment }));
         } catch (err: any) {
             alert(err.response?.data?.message || 'Failed to update');
         }
@@ -97,12 +99,18 @@ function Booking() {
                                             <div className="text-sm text-gray-600">Booked by <span className="font-medium">{userLabel}</span>{userPhone ? ` • ${userPhone}` : ''}</div>
                                         )}
                                     </div>
+                                    {b.status === 'rejected' && b.rejectionComment && (
+                                        <div className="mt-2 text-sm text-red-600">Reason: <span className="font-medium text-gray-800">{b.rejectionComment}</span></div>
+                                    )}
                                 </div>
 
                                 <div className="flex flex-col sm:items-end gap-2">
                                     <div className="flex flex-col sm:flex-row gap-2">
                                         {user?.role === 'provider' && b.status === 'pending' && (
-                                            <button onClick={() => handleUpdate(b._id, 'accepted')} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">Accept</button>
+                                            <>
+                                                <button onClick={() => handleUpdate(b._id, 'accepted')} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">Accept</button>
+                                                <button onClick={() => { setOpenRejectId(b._id); setRejectComment(''); }} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">Reject</button>
+                                            </>
                                         )}
                                         {user?.role === 'provider' && b.status === 'accepted' && (
                                             <button onClick={() => handleUpdate(b._id, 'completed')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Mark Completed</button>
@@ -133,6 +141,26 @@ function Booking() {
                                                 </div>
                                             </div>
                                         )
+                                    )}
+
+                                    {/* Reject form for provider */}
+                                    {user?.role === 'provider' && openRejectId === b._id && (
+                                        <div className="w-full sm:w-[320px] p-3 bg-gray-50 rounded mt-2">
+                                            <textarea placeholder="Rejection reason (optional)" value={rejectComment} onChange={e => setRejectComment(e.target.value)} className="w-full border p-2 rounded mb-2" />
+                                            <div className="flex gap-2 justify-end">
+                                                <button onClick={async () => {
+                                                    try {
+                                                        await handleUpdate(b._id, 'rejected', rejectComment);
+                                                        alert('Booking rejected');
+                                                        setOpenRejectId(null);
+                                                        setRejectComment('');
+                                                    } catch (err:any) {
+                                                        // errors handled in handleUpdate
+                                                    }
+                                                }} className="bg-red-600 text-white px-3 py-1 rounded">Confirm Reject</button>
+                                                <button onClick={() => { setOpenRejectId(null); setRejectComment(''); }} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
                             </div>

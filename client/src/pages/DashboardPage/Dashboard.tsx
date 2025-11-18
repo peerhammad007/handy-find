@@ -29,7 +29,16 @@ const Dashboard: React.FC = () => {
 
         // Total bookings: server's GET /bookings returns bookings for current user/provider
         const bookings = await getBookings();
-        setTotalBookings(bookings.length);
+        // For providers show only bookings that they have completed
+        let bookingCount = bookings.length;
+        if (user.role === 'provider') {
+          const completedForProvider = bookings.filter((b: any) => {
+            const providerId = typeof b.provider === 'string' ? b.provider : (b.provider as any)?._id;
+            return providerId === user._id && b.status === 'completed';
+          });
+          bookingCount = completedForProvider.length;
+        }
+        setTotalBookings(bookingCount);
 
         // Avg rating (provider only)
         if (user.role === 'provider') {

@@ -12,13 +12,15 @@ export const getBookings = async () => {
   return res.data as Booking[];
 };
 
-export const updateBookingStatus = async (id: string, status: Booking['status']) => {
+export const updateBookingStatus = async (id: string, status: Booking['status'], comment?: string) => {
   // server expects PUT /bookings/:id/status
   // include Authorization header explicitly as a fallback in case interceptor misses it
   const token = localStorage.getItem('token');
+  const payload: any = { status };
+  if (comment) payload.comment = comment;
   const res = await http.put(
     `${API_BASE_URL}/bookings/${id}/status`,
-    { status },
+    payload,
     token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
   );
   return res.data as Booking;

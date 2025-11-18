@@ -97,20 +97,6 @@ function ServiceListings() {
                         </div>
                     ))}
                 </div>
-
-                {bookingTarget && (
-                    <div className="mt-6 border p-4 rounded bg-gray-50">
-                        <h3 className="font-semibold">Create Booking</h3>
-                        <div className="grid grid-cols-1 gap-2 mt-2">
-                            <input type="date" value={date} onChange={e => setDate(e.target.value)} className="border p-2 rounded" />
-                            <input placeholder="Slot" value={slot} onChange={e => setSlot(e.target.value)} className="border p-2 rounded" />
-                            <div className="flex gap-2">
-                                <button onClick={submitBooking} className="bg-green-600 text-white px-3 py-1 rounded">Confirm</button>
-                                <button onClick={() => setBookingTarget(null)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                )}
             </div>
         </div>
     );

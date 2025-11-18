@@ -7,6 +7,7 @@ export interface Booking {
     provider: User;
     date: string;
     slot: string;
-    status: 'pending' | 'accepted' | 'completed' | 'cancelled';
+    status: 'pending' | 'accepted' | 'completed' | 'rejected';
+    rejectionComment?: string;
     createdAt?: string;
 }

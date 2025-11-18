@@ -6,7 +6,8 @@ const bookingSchema = new mongoose.Schema({
   provider: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: String, required: true },
   slot: { type: String, required: true },
-  status: { type: String, enum: ['pending', 'accepted', 'completed', 'cancelled'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'accepted', 'completed', 'rejected'], default: 'pending' },
+  rejectionComment: { type: String },
   createdAt: { type: Date, default: Date.now },
 });
 

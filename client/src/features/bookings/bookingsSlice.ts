@@ -32,10 +32,12 @@ const BookingSlice = createSlice({
         addBooking(state, action: PayloadAction<Booking>) {
             state.bookings.push(action.payload);
         },
-        updateBookingStatus(state, action: PayloadAction<{id: string, status: Booking['status']}>) {
+        updateBookingStatus(state, action: PayloadAction<{id: string, status: Booking['status'], rejectionComment?: string}>) {
             const booking = state.bookings.find(b => b._id === action.payload.id);
             if(booking) {
                 booking.status = action.payload.status;
+                if (action.payload.rejectionComment !== undefined) booking.rejectionComment = action.payload.rejectionComment as any;
+                else booking.rejectionComment = undefined as any;
             }
         },
     },

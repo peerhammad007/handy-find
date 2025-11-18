@@ -36,14 +36,24 @@ exports.getBookings = async (req, res) => {
 
 exports.updateBookingStatus = async (req, res) => {
   try {
-    const { status } = req.body;
+    const { status, comment } = req.body;
     const booking = await Booking.findById(req.params.id);
     if (!booking) return res.status(404).json({ message: 'Booking not found' });
     // Only provider can update status
     if (booking.provider.toString() !== req.user.userId) return res.status(403).json({ message: 'Unauthorized' });
+
     booking.status = status;
+    // If provider rejects, store the rejection comment
+    if (status === 'rejected') {
+      booking.rejectionComment = comment || '';
+    } else {
+      // clear any previous rejection comment for other statuses
+      booking.rejectionComment = undefined;
+    }
+
     await booking.save();
-    res.json(booking);
+    const populated = await Booking.findById(booking._id).populate('service user provider');
+    res.json(populated);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
