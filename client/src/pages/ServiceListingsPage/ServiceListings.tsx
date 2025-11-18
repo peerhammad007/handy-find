@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { getAllServices } from '../../api/serviceApi';
 import useAuth from '../../hooks/useAuth';
 import { createBooking as apiCreateBooking } from '../../api/bookingApi';
+import { useNotify } from '../../components/Toast/ToastProvider';
 
 function ServiceListings() {
     const { user } = useAuth();
+    const { notify } = useNotify();
     const [services, setServices] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -28,20 +30,26 @@ function ServiceListings() {
     }, []);
 
     const handleBook = async (serviceId: string) => {
-        if (!user) return alert('Please login to book');
+        if (!user) {
+            notify('info', 'Please login to book');
+            return;
+        }
         setBookingTarget(serviceId);
     };
 
     const submitBooking = async () => {
-        if (!bookingTarget || !date || !slot) return alert('Please pick date and slot');
+        if (!bookingTarget || !date || !slot) {
+            notify('warning', 'Please pick date and slot');
+            return;
+        }
         try {
             await apiCreateBooking({ serviceId: bookingTarget, date, slot });
-            alert('Booking created');
+            notify('success', 'Booking created');
             setBookingTarget(null);
             setDate('');
             setSlot('');
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Booking failed');
+            notify('error', err.response?.data?.message || 'Booking failed');
         }
     };
 

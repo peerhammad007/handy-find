@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import useAuth from '../../hooks/useAuth';
+import { useNotify } from '../../components/Toast/ToastProvider';
 import { getAllServices, createService as apiCreateService, removeService as apiRemoveService } from '../../api/serviceApi';
 import {
   fetchServicesStart,
@@ -15,6 +16,7 @@ import { Service } from '../../types/Service';
 const MyServices: React.FC = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
+  const { notify, confirm } = useNotify();
   const services = useSelector((state: RootState) => state.services.services);
   const loading = useSelector((state: RootState) => state.services.loading);
   const error = useSelector((state: RootState) => state.services.error);
@@ -75,18 +77,18 @@ const MyServices: React.FC = () => {
       setShowAdd(false);
     } catch (err) {
       // simple UI-level handling
-      alert('Failed to create service');
+      notify('error', 'Failed to create service');
     }
   };
 
   const handleDelete = async (id: string) => {
-    // eslint-disable-next-line no-restricted-globals
-    if (!confirm('Delete this service?')) return;
+    const ok = await confirm('Delete this service?');
+    if (!ok) return;
     try {
       await apiRemoveService(id);
       dispatch(deleteService(id));
     } catch (err) {
-      alert('Failed to delete service');
+      notify('error', 'Failed to delete service');
     }
   };
 

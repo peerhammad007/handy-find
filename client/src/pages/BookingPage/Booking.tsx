@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNotify } from '../../components/Toast/ToastProvider';
 import useAuth from '../../hooks/useAuth';
 import { getBookings as apiGetBookings, updateBookingStatus as apiUpdateBookingStatus } from '../../api/bookingApi';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +10,7 @@ import { createReview as apiCreateReview, getReviewByBooking } from '../../api/r
 function Booking() {
     const { user } = useAuth();
     const dispatch = useDispatch();
+    const { notify } = useNotify();
     const bookings = useSelector((state: RootState) => state.bookings.bookings);
     const loading = useSelector((state: RootState) => state.bookings.loading);
     const [error, setError] = useState<string | null>(null);
@@ -59,8 +61,9 @@ function Booking() {
         try {
             await apiUpdateBookingStatus(id, status, comment);
             dispatch(updateBookingStatus({ id, status, rejectionComment: comment }));
+            notify('success', 'Booking updated');
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Failed to update');
+            notify('error', err.response?.data?.message || 'Failed to update');
         }
     };
 
@@ -130,11 +133,11 @@ function Booking() {
                                                     <button onClick={async () => {
                                                         try {
                                                             await apiCreateReview({ bookingId: b._id, rating: reviewRating, comment: reviewComment });
-                                                            alert('Review submitted');
+                                                            notify('success', 'Review submitted');
                                                             setReviewedMap(prev => ({ ...(prev || {}), [b._id]: reviewRating }));
                                                             setOpenReviewId(null);
                                                         } catch (err: any) {
-                                                            alert(err.response?.data?.message || 'Failed to submit review');
+                                                            notify('error', err.response?.data?.message || 'Failed to submit review');
                                                         }
                                                     }} className="bg-green-600 text-white px-3 py-1 rounded">Submit</button>
                                                     <button onClick={() => setOpenReviewId(null)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
@@ -149,14 +152,14 @@ function Booking() {
                                             <textarea placeholder="Rejection reason (optional)" value={rejectComment} onChange={e => setRejectComment(e.target.value)} className="w-full border p-2 rounded mb-2" />
                                             <div className="flex gap-2 justify-end">
                                                 <button onClick={async () => {
-                                                    try {
-                                                        await handleUpdate(b._id, 'rejected', rejectComment);
-                                                        alert('Booking rejected');
-                                                        setOpenRejectId(null);
-                                                        setRejectComment('');
-                                                    } catch (err:any) {
-                                                        // errors handled in handleUpdate
-                                                    }
+                                                try {
+                                                    await handleUpdate(b._id, 'rejected', rejectComment);
+                                                    notify('success', 'Booking rejected');
+                                                    setOpenRejectId(null);
+                                                    setRejectComment('');
+                                                } catch (err:any) {
+                                                    // errors handled in handleUpdate
+                                                }
                                                 }} className="bg-red-600 text-white px-3 py-1 rounded">Confirm Reject</button>
                                                 <button onClick={() => { setOpenRejectId(null); setRejectComment(''); }} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
                                             </div>

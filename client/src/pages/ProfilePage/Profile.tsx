@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
+import { useNotify } from '../../components/Toast/ToastProvider';
 import { getProfile, updateProfile } from '../../api/userApi';
 import { Link } from 'react-router-dom';
 
 function Profile() {
     const { user, signOut } = useAuth();
+    const { notify } = useNotify();
     const [profile, setProfile] = useState<any>(null);
     const [editing, setEditing] = useState(false);
     const [form, setForm] = useState({ name: '', phone: '', location: '', bio: '' });
@@ -29,9 +31,9 @@ function Profile() {
             const updated = await updateProfile(form);
             setProfile(updated);
             setEditing(false);
-            alert('Profile updated');
+            notify('success', 'Profile updated');
         } catch (err: any) {
-            alert(err.response?.data?.message || 'Update failed');
+            notify('error', err.response?.data?.message || 'Update failed');
         }
     };
 
