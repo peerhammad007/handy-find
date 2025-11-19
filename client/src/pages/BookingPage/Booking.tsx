@@ -35,10 +35,11 @@ function Booking() {
             dispatch(fetchBookingsStart());
             try {
                 const res = await apiGetBookings();
-                dispatch(fetchBookingsSuccess(res));
+                const sorted = [...res].sort((a: any, b: any) => getItemTime(b) - getItemTime(a));
+                dispatch(fetchBookingsSuccess(sorted));
                 // determine which bookings already have reviews (for users)
                 if (user?.role === 'user') {
-                    const completed = res.filter((b: any) => b.status === 'completed');
+                    const completed = sorted.filter((b: any) => b.status === 'completed');
                     const checks = await Promise.all(completed.map(async (b: any) => {
                         try {
                             const review = await getReviewByBooking(b._id);
@@ -58,6 +59,18 @@ function Booking() {
         };
         load();
     }, [dispatch]);
+
+    const getItemTime = (item: any): number => {
+        if (item?.createdAt) {
+            const t = Date.parse(item.createdAt);
+            if (!isNaN(t)) return t;
+        }
+        if (item?._id && typeof item._id === 'string' && item._id.length >= 8) {
+            const seconds = parseInt(item._id.substring(0, 8), 16);
+            if (!isNaN(seconds)) return seconds * 1000;
+        }
+        return 0;
+    };
 
     const handleUpdate = async (id: string, status: any, comment?: string) => {
         try {

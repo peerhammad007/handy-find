@@ -15,7 +15,8 @@ function Reviews() {
             setLoading(true);
             try {
                 const res = await getReviewsForProvider(user._id);
-                setReviews(res);
+                const sorted = [...res].sort((a: any, b: any) => getItemTime(b) - getItemTime(a));
+                setReviews(sorted);
             } catch (err) {
                 // ignore for now
             } finally {
@@ -24,6 +25,18 @@ function Reviews() {
         };
         load();
     }, [user]);
+
+    const getItemTime = (item: any): number => {
+        if (item?.createdAt) {
+            const t = Date.parse(item.createdAt);
+            if (!isNaN(t)) return t;
+        }
+        if (item?._id && typeof item._id === 'string' && item._id.length >= 8) {
+            const seconds = parseInt(item._id.substring(0, 8), 16);
+            if (!isNaN(seconds)) return seconds * 1000;
+        }
+        return 0;
+    };
 
     if (user?.role !== 'provider') {
         return (

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { getAllServices } from '../../api/serviceApi';
 import useAuth from '../../hooks/useAuth';
-import { createBooking as apiCreateBooking } from '../../api/bookingApi';
+import { createBooking as apiCreateBooking, getBookings as apiGetBookings } from '../../api/bookingApi';
 import { useNotify } from '../../components/Toast/ToastProvider';
 
 function ServiceListings() {
     const { user } = useAuth();
     const { notify } = useNotify();
     const [services, setServices] = useState<any[]>([]);
+    const [activeBookedServiceIds, setActiveBookedServiceIds] = useState<Set<string>>(new Set());
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchField, setSearchField] = useState<'title' | 'category'>('title');
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -23,7 +24,24 @@ function ServiceListings() {
             setLoading(true);
             try {
                 const all = await getAllServices();
-                setServices(all);
+                const sorted = [...all].sort((a: any, b: any) => getItemTime(b) - getItemTime(a));
+                setServices(sorted);
+                // also load user's active bookings to prevent duplicates
+                if (user?.role === 'user') {
+                    try {
+                        const myBookings = await apiGetBookings();
+                        const active = new Set<string>();
+                        myBookings.forEach((b: any) => {
+                            if (b?.status === 'pending' || b?.status === 'accepted') {
+                                const sid = typeof b.service === 'object' ? (b.service as any)?._id : b.service;
+                                if (sid) active.add(String(sid));
+                            }
+                        });
+                        setActiveBookedServiceIds(active);
+                    } catch (e) {
+                        // ignore silently
+                    }
+                }
             } catch (err: any) {
                 setError(err.message || 'Failed to load services');
             } finally {
@@ -31,11 +49,27 @@ function ServiceListings() {
             }
         };
         load();
-    }, []);
+    }, [user?.role]);
+
+    const getItemTime = (item: any): number => {
+        if (item?.createdAt) {
+            const t = Date.parse(item.createdAt);
+            if (!isNaN(t)) return t;
+        }
+        if (item?._id && typeof item._id === 'string' && item._id.length >= 8) {
+            const seconds = parseInt(item._id.substring(0, 8), 16);
+            if (!isNaN(seconds)) return seconds * 1000;
+        }
+        return 0;
+    };
 
     const handleBook = async (serviceId: string) => {
         if (!user) {
             notify('info', 'Please login to book');
+            return;
+        }
+        if (activeBookedServiceIds.has(serviceId)) {
+            notify('warning', 'You already have an active booking for this service');
             return;
         }
         setBookingTarget(serviceId);
@@ -49,6 +83,11 @@ function ServiceListings() {
         try {
             await apiCreateBooking({ serviceId: bookingTarget, date, slot });
             notify('success', 'Booking created');
+            setActiveBookedServiceIds(prev => {
+                const next = new Set(prev);
+                if (bookingTarget) next.add(bookingTarget);
+                return next;
+            });
             setBookingTarget(null);
             setDate('');
             setSlot('');
@@ -124,7 +163,13 @@ function ServiceListings() {
                                     </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    {user?.role === 'user' && <button onClick={() => handleBook(s._id)} className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md">Book</button>}
+                                    {user?.role === 'user' && (
+                                        activeBookedServiceIds.has(s._id) ? (
+                                            <button disabled className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md cursor-not-allowed">Already booked</button>
+                                        ) : (
+                                            <button onClick={() => handleBook(s._id)} className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md">Book</button>
+                                        )
+                                    )}
                                 </div>
                             </div>
 

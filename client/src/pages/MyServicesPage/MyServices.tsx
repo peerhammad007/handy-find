@@ -39,13 +39,26 @@ const MyServices: React.FC = () => {
       dispatch(fetchServicesStart());
       try {
         const all = await getAllServices();
-        dispatch(fetchServicesSuccess(all));
+        const sorted = [...all].sort((a: any, b: any) => getItemTime(b) - getItemTime(a));
+        dispatch(fetchServicesSuccess(sorted));
       } catch (err: any) {
         dispatch(fetchServicesFailure(err.message || 'Failed to load services'));
       }
     };
     load();
   }, [dispatch]);
+
+  const getItemTime = (item: any): number => {
+    if (item?.createdAt) {
+      const t = Date.parse(item.createdAt);
+      if (!isNaN(t)) return t;
+    }
+    if (item?._id && typeof item._id === 'string' && item._id.length >= 8) {
+      const seconds = parseInt(item._id.substring(0, 8), 16);
+      if (!isNaN(seconds)) return seconds * 1000;
+    }
+    return 0;
+  };
 
   const myServices = user
     ? services.filter(s => {
@@ -139,7 +152,7 @@ const MyServices: React.FC = () => {
         {myServices.length === 0 && <div>No services yet. Add one above.</div>}
 
         <div className="grid gap-4">
-          {myServices.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((s: any) => (
+          {[...myServices].sort((a: any, b: any) => getItemTime(b) - getItemTime(a)).slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((s: any) => (
             <div key={s._id} className="bg-white p-4 rounded-lg shadow-sm flex justify-between items-start gap-4">
               <div className="flex-1">
                 <h3 className="font-semibold text-lg text-gray-900">{s.title}</h3>
