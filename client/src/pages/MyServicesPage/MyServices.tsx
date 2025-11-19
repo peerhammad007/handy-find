@@ -124,7 +124,7 @@ const MyServices: React.FC = () => {
       <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
           <h2 className="text-2xl font-bold text-blue-600">My Services</h2>
-          <button onClick={() => setShowAdd(v => !v)} className="bg-blue-600 text-white px-4 py-2 rounded">{showAdd ? 'Cancel' : '+ Add Service'}</button>
+          <button onClick={() => setShowAdd(v => !v)} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">{showAdd ? 'Cancel' : '+ Add Service'}</button>
         </div>
 
         {showAdd && (
@@ -141,7 +141,7 @@ const MyServices: React.FC = () => {
             <input name="category" value={form.category} onChange={handleChange} placeholder="Category" className="border p-2 rounded" />
             <input name="serviceableLocations" value={form.serviceableLocations} onChange={handleChange} placeholder="Locations (comma separated)" className="border p-2 rounded" />
             <div>
-              <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded">Create</button>
+              <button type="submit" className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Create Service</button>
             </div>
           </form>
         )}
@@ -163,19 +163,19 @@ const MyServices: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
-                <button onClick={() => handleDelete(s._id)} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">Delete</button>
+                <button onClick={() => handleDelete(s._id)} className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Delete</button>
               </div>
             </div>
           ))}
         </div>
         {myServices.length > PAGE_SIZE && (
-            <div className="mt-6 flex items-center justify-center gap-2">
-                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
-                {Array.from({ length: Math.ceil(myServices.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
-                    <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
-                ))}
-                <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(myServices.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
-            </div>
+          <div className="mt-6 flex items-center flex-wrap justify-center gap-2">
+            <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Prev</button>
+            {Array.from({ length: Math.ceil(myServices.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
+              <button key={p} onClick={() => setCurrentPage(p)} className={`px-4 py-2 rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-sky-400 transition-colors ${p === currentPage ? 'bg-sky-600 text-white shadow-sm' : 'bg-white border border-sky-200 text-sky-700 hover:bg-sky-50'}`}>{p}</button>
+            ))}
+            <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(myServices.length / PAGE_SIZE), p + 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Next</button>
+          </div>
         )}
       </div>
     </div>

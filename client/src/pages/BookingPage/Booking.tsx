@@ -126,18 +126,18 @@ function Booking() {
                                     <div className="flex flex-col sm:flex-row gap-2">
                                         {user?.role === 'provider' && b.status === 'pending' && (
                                             <>
-                                                <button onClick={() => handleUpdate(b._id, 'accepted')} className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">Accept</button>
-                                                <button onClick={() => { setOpenRejectId(b._id); setRejectComment(''); }} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">Reject</button>
+                                                <button onClick={() => handleUpdate(b._id, 'accepted')} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Accept</button>
+                                                <button onClick={() => { setOpenRejectId(b._id); setRejectComment(''); }} className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Reject</button>
                                             </>
                                         )}
                                         {user?.role === 'provider' && b.status === 'accepted' && (
-                                            <button onClick={() => handleUpdate(b._id, 'completed')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Mark Completed</button>
+                                            <button onClick={() => handleUpdate(b._id, 'completed')} className="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Mark Completed</button>
                                         )}
                                     </div>
 
                                     {user?.role === 'user' && b.status === 'completed' && reviewedMap !== null && !(b._id in reviewedMap) && (
                                         !openReviewId || openReviewId !== b._id ? (
-                                            <button onClick={() => { setOpenReviewId(b._id); setReviewRating(5); setReviewComment(''); }} className="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-md">Write Review</button>
+                                            <button onClick={() => { setOpenReviewId(b._id); setReviewRating(5); setReviewComment(''); }} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Write Review</button>
                                         ) : (
                                             <div className="w-full sm:w-[320px] p-3 bg-gray-50 rounded">
                                                 <select value={reviewRating} onChange={e => setReviewRating(Number(e.target.value))} className="w-full border p-2 rounded mb-2">
@@ -154,8 +154,8 @@ function Booking() {
                                                         } catch (err: any) {
                                                             notify('error', err.response?.data?.message || 'Failed to submit review');
                                                         }
-                                                    }} className="bg-green-600 text-white px-3 py-1 rounded">Submit</button>
-                                                    <button onClick={() => setOpenReviewId(null)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
+                                                    }} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Submit Review</button>
+                                                    <button onClick={() => setOpenReviewId(null)} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium transition-colors">Cancel</button>
                                                 </div>
                                             </div>
                                         )
@@ -175,8 +175,8 @@ function Booking() {
                                                 } catch (err:any) {
                                                     // errors handled in handleUpdate
                                                 }
-                                                }} className="bg-red-600 text-white px-3 py-1 rounded">Confirm Reject</button>
-                                                <button onClick={() => { setOpenRejectId(null); setRejectComment(''); }} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
+                                                }} className="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Confirm Reject</button>
+                                                <button onClick={() => { setOpenRejectId(null); setRejectComment(''); }} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium transition-colors">Cancel</button>
                                             </div>
                                         </div>
                                     )}
@@ -186,12 +186,12 @@ function Booking() {
                     })}
                 </div>
                 {bookings.length > PAGE_SIZE && (
-                    <div className="mt-6 flex items-center justify-center gap-2">
-                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
+                    <div className="mt-6 flex items-center flex-wrap justify-center gap-2">
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Prev</button>
                         {Array.from({ length: Math.ceil(bookings.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
-                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
+                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-4 py-2 rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-sky-400 transition-colors ${p === currentPage ? 'bg-sky-600 text-white shadow-sm' : 'bg-white border border-sky-200 text-sky-700 hover:bg-sky-50'}`}>{p}</button>
                         ))}
-                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(bookings.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(bookings.length / PAGE_SIZE), p + 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Next</button>
                     </div>
                 )}
             </div>

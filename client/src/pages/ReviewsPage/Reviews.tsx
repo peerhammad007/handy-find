@@ -73,12 +73,12 @@ function Reviews() {
                     </div>
                 ))}
                 {reviews.length > PAGE_SIZE && (
-                    <div className="mt-4 flex items-center justify-center gap-2">
-                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
+                    <div className="mt-4 flex items-center flex-wrap justify-center gap-2">
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Prev</button>
                         {Array.from({ length: Math.ceil(reviews.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
-                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
+                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-4 py-2 rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-sky-400 transition-colors ${p === currentPage ? 'bg-sky-600 text-white shadow-sm' : 'bg-white border border-sky-200 text-sky-700 hover:bg-sky-50'}`}>{p}</button>
                         ))}
-                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(reviews.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(reviews.length / PAGE_SIZE), p + 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Next</button>
                     </div>
                 )}
             </div>

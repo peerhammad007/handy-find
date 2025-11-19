@@ -165,9 +165,9 @@ function ServiceListings() {
                                 <div className="flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
                                     {user?.role === 'user' && (
                                         activeBookedServiceIds.has(s._id) ? (
-                                            <button disabled className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md cursor-not-allowed">Already booked</button>
+                                            <button disabled className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium transition-colors">Already booked</button>
                                         ) : (
-                                            <button onClick={() => handleBook(s._id)} className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md">Book</button>
+                                            <button onClick={() => handleBook(s._id)} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Book</button>
                                         )
                                     )}
                                 </div>
@@ -181,8 +181,8 @@ function ServiceListings() {
                                         <input type="date" value={date} onChange={e => setDate(e.target.value)} className="border p-2 rounded" />
                                         <input placeholder="Slot" value={slot} onChange={e => setSlot(e.target.value)} className="border p-2 rounded" />
                                         <div className="flex flex-col sm:flex-row gap-2 justify-end sm:items-center">
-                                            <button onClick={submitBooking} className="bg-green-600 text-white px-3 py-2 rounded">Confirm</button>
-                                            <button onClick={() => setBookingTarget(null)} className="bg-gray-300 px-3 py-2 rounded">Cancel</button>
+                                            <button onClick={submitBooking} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Confirm Booking</button>
+                                            <button onClick={() => setBookingTarget(null)} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium transition-colors">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
@@ -195,8 +195,8 @@ function ServiceListings() {
                     const fieldVal = (searchField === 'title' ? s.title : s.category) || '';
                     return fieldVal.toLowerCase().includes(searchTerm.trim().toLowerCase());
                 }).length > PAGE_SIZE && (
-                    <div className="mt-6 flex items-center justify-center gap-2">
-                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
+                    <div className="mt-6 flex items-center flex-wrap justify-center gap-2">
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Prev</button>
                         {Array.from({ length: Math.ceil(services.filter((s: any) => {
                             if (!searchTerm.trim()) return true;
                             const fieldVal = (searchField === 'title' ? s.title : s.category) || '';
@@ -205,14 +205,14 @@ function ServiceListings() {
                             <button
                                 key={p}
                                 onClick={() => setCurrentPage(p)}
-                                className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}
+                                className={`px-4 py-2 rounded-full font-medium focus:outline-none focus:ring-2 focus:ring-sky-400 transition-colors ${p === currentPage ? 'bg-sky-600 text-white shadow-sm' : 'bg-white border border-sky-200 text-sky-700 hover:bg-sky-50'}`}
                             >{p}</button>
                         ))}
                         <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(services.filter((s: any) => {
                             if (!searchTerm.trim()) return true;
                             const fieldVal = (searchField === 'title' ? s.title : s.category) || '';
                             return fieldVal.toLowerCase().includes(searchTerm.trim().toLowerCase());
-                        }).length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+                        }).length / PAGE_SIZE), p + 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-sky-400">Next</button>
                     </div>
                 )}
             </div>

@@ -70,9 +70,8 @@ function Profile() {
                                 </div>
 
                                 <div className="mt-4 flex gap-2 justify-end">
-                                    <button onClick={() => setEditing(true)} className="bg-blue-600 text-white px-4 py-2 rounded-md">Edit</button>
-                                    <button onClick={() => signOut()} className="bg-gray-300 px-4 py-2 rounded-md">Logout</button>
-                                    {profile.role === 'provider' && <Link to="/my-services" className="bg-green-600 text-white px-4 py-2 rounded-md">My Services</Link>}
+                                    <button onClick={() => setEditing(true)} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Edit Profile</button>
+                                    <button onClick={() => signOut()} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium transition-colors">Logout</button>
                                 </div>
                             </div>
                         </div>
@@ -84,8 +83,8 @@ function Profile() {
                         <input name="location" value={form.location} onChange={handleChange} className="border p-2 rounded w-full" />
                         <textarea name="bio" value={form.bio} onChange={handleChange} className="border p-2 rounded w-full min-h-[120px]" />
                         <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
-                            <button onClick={handleSave} className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
-                            <button onClick={() => setEditing(false)} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
+                            <button onClick={handleSave} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Save Changes</button>
+                            <button onClick={() => setEditing(false)} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium transition-colors">Cancel</button>
                         </div>
                     </div>
                 )}
