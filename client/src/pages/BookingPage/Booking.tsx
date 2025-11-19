@@ -13,6 +13,8 @@ function Booking() {
     const { notify } = useNotify();
     const bookings = useSelector((state: RootState) => state.bookings.bookings);
     const loading = useSelector((state: RootState) => state.bookings.loading);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const PAGE_SIZE = 6;
     const [error, setError] = useState<string | null>(null);
     const [openReviewId, setOpenReviewId] = useState<string | null>(null);
     const [reviewRating, setReviewRating] = useState<number>(5);
@@ -82,7 +84,7 @@ function Booking() {
                 {error && <div className="text-red-600">{error}</div>}
 
                 <div className="grid gap-4">
-                    {bookings.map((b: any) => {
+                    {bookings.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((b: any) => {
                         const serviceLabel = typeof b.service === 'object' ? (b.service as any)?.title || (b.service as any)?._id : b.service;
                         const userLabel = typeof b.user === 'object' ? (b.user as any)?.name || (b.user as any)?._id : b.user;
                         const userPhone = typeof b.user === 'object' ? (b.user as any)?.phone : undefined;
@@ -170,6 +172,15 @@ function Booking() {
                         );
                     })}
                 </div>
+                {bookings.length > PAGE_SIZE && (
+                    <div className="mt-6 flex items-center justify-center gap-2">
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
+                        {Array.from({ length: Math.ceil(bookings.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
+                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
+                        ))}
+                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(bookings.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+                    </div>
+                )}
             </div>
         </div>
     );

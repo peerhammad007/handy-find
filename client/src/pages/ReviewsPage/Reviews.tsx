@@ -5,6 +5,8 @@ import { getReviewsForProvider } from '../../api/reviewApi';
 function Reviews() {
     const { user } = useAuth();
     const [reviews, setReviews] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const PAGE_SIZE = 6;
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -45,7 +47,7 @@ function Reviews() {
             <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
                 <h2 className="text-2xl font-bold mb-4">Reviews for Your Services</h2>
                 {loading && <div>Loading...</div>}
-                {reviews.map((r: any) => (
+                {reviews.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((r: any) => (
                     <div key={r._id} className="bg-white p-4 rounded-lg shadow-sm mb-3">
                         <div className="flex items-center justify-between">
                             <div>
@@ -57,6 +59,15 @@ function Reviews() {
                         {r.comment && <div className="mt-3 text-gray-700">{r.comment}</div>}
                     </div>
                 ))}
+                {reviews.length > PAGE_SIZE && (
+                    <div className="mt-4 flex items-center justify-center gap-2">
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
+                        {Array.from({ length: Math.ceil(reviews.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
+                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
+                        ))}
+                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(reviews.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+                    </div>
+                )}
             </div>
         </div>
     );

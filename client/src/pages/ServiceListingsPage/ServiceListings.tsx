@@ -8,6 +8,8 @@ function ServiceListings() {
     const { user } = useAuth();
     const { notify } = useNotify();
     const [services, setServices] = useState<any[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const PAGE_SIZE = 6;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [bookingTarget, setBookingTarget] = useState<string | null>(null);
@@ -74,7 +76,7 @@ function ServiceListings() {
             <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
                 <h2 className="text-2xl font-bold mb-4">Service Listings</h2>
                 <div className="grid gap-4">
-                    {services.map((s: any) => (
+                    {services.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((s: any) => (
                         <div key={s._id} className="bg-white p-4 rounded-lg shadow-sm">
                             <div className="flex justify-between items-start gap-4">
                                 <div className="flex-1">
@@ -82,6 +84,9 @@ function ServiceListings() {
                                     <p className="text-sm text-gray-600 mt-1">{s.description}</p>
                                     <div className="mt-2 text-sm text-gray-600">Provider: <span className="font-medium text-gray-800">{s.provider?.name || 'Unknown'}</span></div>
                                     <div className="text-sm mt-1">Price: <span className="font-medium">{s.price} ({s.priceType})</span></div>
+                                    <div className="flex flex-wrap gap-3 mt-3 text-sm">
+                                        <span className="px-2 py-0.5 rounded-full text-sm font-medium bg-sky-50 text-sky-700 border border-sky-100">{s.category}</span>
+                                    </div>
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     {user?.role === 'user' && <button onClick={() => handleBook(s._id)} className="bg-sky-600 hover:bg-sky-700 text-white px-4 py-2 rounded-md">Book</button>}
@@ -105,6 +110,15 @@ function ServiceListings() {
                         </div>
                     ))}
                 </div>
+                {services.length > PAGE_SIZE && (
+                    <div className="mt-6 flex items-center justify-center gap-2">
+                        <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
+                        {Array.from({ length: Math.ceil(services.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
+                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
+                        ))}
+                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(services.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+                    </div>
+                )}
             </div>
         </div>
     );

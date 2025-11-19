@@ -21,6 +21,9 @@ const MyServices: React.FC = () => {
   const loading = useSelector((state: RootState) => state.services.loading);
   const error = useSelector((state: RootState) => state.services.error);
 
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const PAGE_SIZE = 6;
+
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -136,7 +139,7 @@ const MyServices: React.FC = () => {
         {myServices.length === 0 && <div>No services yet. Add one above.</div>}
 
         <div className="grid gap-4">
-          {myServices.map((s: any) => (
+          {myServices.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((s: any) => (
             <div key={s._id} className="bg-white p-4 rounded-lg shadow-sm flex justify-between items-start gap-4">
               <div className="flex-1">
                 <h3 className="font-semibold text-lg text-gray-900">{s.title}</h3>
@@ -152,6 +155,15 @@ const MyServices: React.FC = () => {
             </div>
           ))}
         </div>
+        {myServices.length > PAGE_SIZE && (
+            <div className="mt-6 flex items-center justify-center gap-2">
+                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
+                {Array.from({ length: Math.ceil(myServices.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
+                    <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
+                ))}
+                <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(myServices.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+            </div>
+        )}
       </div>
     </div>
   );
