@@ -8,6 +8,8 @@ function ServiceListings() {
     const { user } = useAuth();
     const { notify } = useNotify();
     const [services, setServices] = useState<any[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>('');
+    const [searchField, setSearchField] = useState<'title' | 'category'>('title');
     const [currentPage, setCurrentPage] = useState<number>(1);
     const PAGE_SIZE = 6;
     const [loading, setLoading] = useState(false);
@@ -75,8 +77,41 @@ function ServiceListings() {
         <div className="min-h-screen bg-sky-50 pt-20">
             <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
                 <h2 className="text-2xl font-bold mb-4">Service Listings</h2>
+                {/* Search / Filter Controls */}
+                <div className="mb-6 flex flex-col sm:flex-row gap-3 items-start sm:items-end">
+                    <div className="flex flex-col gap-1 w-full sm:max-w-xs">
+                        <label htmlFor="searchTerm" className="text-sm font-medium text-gray-700">Search</label>
+                        <input
+                            id="searchTerm"
+                            type="text"
+                            value={searchTerm}
+                            onChange={e => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                            placeholder={`Search by ${searchField}`}
+                            className="border p-2 rounded w-full"
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1 w-full sm:w-auto">
+                        <label htmlFor="searchField" className="text-sm font-medium text-gray-700">Field</label>
+                        <select
+                            id="searchField"
+                            value={searchField}
+                            onChange={e => { setSearchField(e.target.value as 'title' | 'category'); setCurrentPage(1); }}
+                            className="border p-2 rounded"
+                        >
+                            <option value="title">Title</option>
+                            <option value="category">Category</option>
+                        </select>
+                    </div>
+                </div>
                 <div className="grid gap-4">
-                    {services.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((s: any) => (
+                    {services
+                        .filter((s: any) => {
+                            if (!searchTerm.trim()) return true;
+                            const fieldVal = (searchField === 'title' ? s.title : s.category) || '';
+                            return fieldVal.toLowerCase().includes(searchTerm.trim().toLowerCase());
+                        })
+                        .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+                        .map((s: any) => (
                         <div key={s._id} className="bg-white p-4 rounded-lg shadow-sm">
                             <div className="flex justify-between items-start gap-4">
                                 <div className="flex-1">
@@ -110,13 +145,29 @@ function ServiceListings() {
                         </div>
                     ))}
                 </div>
-                {services.length > PAGE_SIZE && (
+                {services.filter((s: any) => {
+                    if (!searchTerm.trim()) return true;
+                    const fieldVal = (searchField === 'title' ? s.title : s.category) || '';
+                    return fieldVal.toLowerCase().includes(searchTerm.trim().toLowerCase());
+                }).length > PAGE_SIZE && (
                     <div className="mt-6 flex items-center justify-center gap-2">
                         <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} className="px-3 py-1 rounded bg-gray-200">Prev</button>
-                        {Array.from({ length: Math.ceil(services.length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
-                            <button key={p} onClick={() => setCurrentPage(p)} className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}>{p}</button>
+                        {Array.from({ length: Math.ceil(services.filter((s: any) => {
+                            if (!searchTerm.trim()) return true;
+                            const fieldVal = (searchField === 'title' ? s.title : s.category) || '';
+                            return fieldVal.toLowerCase().includes(searchTerm.trim().toLowerCase());
+                        }).length / PAGE_SIZE) }, (_, i) => i + 1).map(p => (
+                            <button
+                                key={p}
+                                onClick={() => setCurrentPage(p)}
+                                className={`px-3 py-1 rounded ${p === currentPage ? 'bg-sky-600 text-white' : 'bg-white border'}`}
+                            >{p}</button>
                         ))}
-                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(services.length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
+                        <button onClick={() => setCurrentPage(p => Math.min(Math.ceil(services.filter((s: any) => {
+                            if (!searchTerm.trim()) return true;
+                            const fieldVal = (searchField === 'title' ? s.title : s.category) || '';
+                            return fieldVal.toLowerCase().includes(searchTerm.trim().toLowerCase());
+                        }).length / PAGE_SIZE), p + 1))} className="px-3 py-1 rounded bg-gray-200">Next</button>
                     </div>
                 )}
             </div>
