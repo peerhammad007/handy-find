@@ -15,7 +15,7 @@ function Home() {
                                 <Link to="/services" className="inline-block bg-sky-600 hover:bg-sky-700 text-white px-6 py-3 rounded-full text-base font-medium shadow">Find Services Near You</Link>
                             </div>
 
-                            <div className="mt-10 flex items-center justify-center gap-10">
+                            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-10">
                                 <div className="text-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" className="mx-auto h-10 w-10 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c1.657 0 3-1.567 3-3.5S13.657 1 12 1 9 2.567 9 4.5 10.343 8 12 8zM6 22v-2a4 4 0 014-4h4a4 4 0 014 4v2" /></svg>
                                     <p className="mt-2 font-semibold">For Clients</p>

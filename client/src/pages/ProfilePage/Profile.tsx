@@ -78,14 +78,14 @@ function Profile() {
                         </div>
                     </>
                 ) : (
-                    <div className="grid gap-2">
-                        <input name="name" value={form.name} onChange={handleChange} className="border p-2 rounded" />
-                        <input name="phone" value={form.phone} onChange={handleChange} className="border p-2 rounded" />
-                        <input name="location" value={form.location} onChange={handleChange} className="border p-2 rounded" />
-                        <textarea name="bio" value={form.bio} onChange={handleChange} className="border p-2 rounded" />
-                        <div className="flex gap-2">
-                            <button onClick={handleSave} className="bg-green-600 text-white px-3 py-1 rounded">Save</button>
-                            <button onClick={() => setEditing(false)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
+                    <div className="grid gap-3">
+                        <input name="name" value={form.name} onChange={handleChange} className="border p-2 rounded w-full" />
+                        <input name="phone" value={form.phone} onChange={handleChange} className="border p-2 rounded w-full" />
+                        <input name="location" value={form.location} onChange={handleChange} className="border p-2 rounded w-full" />
+                        <textarea name="bio" value={form.bio} onChange={handleChange} className="border p-2 rounded w-full min-h-[120px]" />
+                        <div className="flex flex-col sm:flex-row gap-2 sm:justify-end">
+                            <button onClick={handleSave} className="bg-green-600 text-white px-4 py-2 rounded">Save</button>
+                            <button onClick={() => setEditing(false)} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
                         </div>
                     </div>
                 )}

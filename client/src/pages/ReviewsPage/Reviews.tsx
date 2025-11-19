@@ -62,12 +62,12 @@ function Reviews() {
                 {loading && <div>Loading...</div>}
                 {reviews.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((r: any) => (
                     <div key={r._id} className="bg-white p-4 rounded-lg shadow-sm mb-3">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                             <div>
                                 <div className="font-medium">{r.user?.name}</div>
                                 <div className="text-sm text-gray-500">{r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ''}</div>
                             </div>
-                            <div className="text-yellow-500 text-lg">{renderStars(r.rating)}</div>
+                            <div className="text-yellow-500 text-lg sm:self-center">{renderStars(r.rating)}</div>
                         </div>
                         {r.comment && <div className="mt-3 text-gray-700">{r.comment}</div>}
                     </div>

@@ -122,7 +122,7 @@ const MyServices: React.FC = () => {
   return (
     <div className="min-h-screen bg-sky-50 pt-20">
       <div className="max-w-4xl mx-auto px-6 py-10 bg-white/80 backdrop-blur rounded-2xl p-8 shadow-lg">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
           <h2 className="text-2xl font-bold text-blue-600">My Services</h2>
           <button onClick={() => setShowAdd(v => !v)} className="bg-blue-600 text-white px-4 py-2 rounded">{showAdd ? 'Cancel' : '+ Add Service'}</button>
         </div>
@@ -153,7 +153,7 @@ const MyServices: React.FC = () => {
 
         <div className="grid gap-4">
           {[...myServices].sort((a: any, b: any) => getItemTime(b) - getItemTime(a)).slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((s: any) => (
-            <div key={s._id} className="bg-white p-4 rounded-lg shadow-sm flex justify-between items-start gap-4">
+            <div key={s._id} className="bg-white p-4 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between items-start gap-4">
               <div className="flex-1">
                 <h3 className="font-semibold text-lg text-gray-900">{s.title}</h3>
                 <p className="text-sm text-gray-600 mt-1">{s.description}</p>
@@ -162,7 +162,7 @@ const MyServices: React.FC = () => {
                   <span className="text-gray-600">Price: <span className="font-medium text-gray-900">{s.price} ({s.priceType})</span></span>
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
                 <button onClick={() => handleDelete(s._id)} className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-md">Delete</button>
               </div>
             </div>

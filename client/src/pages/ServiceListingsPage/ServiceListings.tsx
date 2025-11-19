@@ -152,7 +152,7 @@ function ServiceListings() {
                         .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
                         .map((s: any) => (
                         <div key={s._id} className="bg-white p-4 rounded-lg shadow-sm">
-                            <div className="flex justify-between items-start gap-4">
+                            <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                                 <div className="flex-1">
                                     <h3 className="font-semibold text-lg text-gray-900">{s.title}</h3>
                                     <p className="text-sm text-gray-600 mt-1">{s.description}</p>
@@ -162,7 +162,7 @@ function ServiceListings() {
                                         <span className="px-2 py-0.5 rounded-full text-sm font-medium bg-sky-50 text-sky-700 border border-sky-100">{s.category}</span>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-row sm:flex-col gap-2 w-full sm:w-auto">
                                     {user?.role === 'user' && (
                                         activeBookedServiceIds.has(s._id) ? (
                                             <button disabled className="bg-gray-300 text-gray-600 px-4 py-2 rounded-md cursor-not-allowed">Already booked</button>
@@ -180,9 +180,9 @@ function ServiceListings() {
                                     <div className="grid grid-cols-1 gap-2 mt-2">
                                         <input type="date" value={date} onChange={e => setDate(e.target.value)} className="border p-2 rounded" />
                                         <input placeholder="Slot" value={slot} onChange={e => setSlot(e.target.value)} className="border p-2 rounded" />
-                                        <div className="flex gap-2 justify-end">
-                                            <button onClick={submitBooking} className="bg-green-600 text-white px-3 py-1 rounded">Confirm</button>
-                                            <button onClick={() => setBookingTarget(null)} className="bg-gray-300 px-3 py-1 rounded">Cancel</button>
+                                        <div className="flex flex-col sm:flex-row gap-2 justify-end sm:items-center">
+                                            <button onClick={submitBooking} className="bg-green-600 text-white px-3 py-2 rounded">Confirm</button>
+                                            <button onClick={() => setBookingTarget(null)} className="bg-gray-300 px-3 py-2 rounded">Cancel</button>
                                         </div>
                                     </div>
                                 </div>
