@@ -22,10 +22,12 @@ export const removeService = async (id: string) => {
   return res.data;
 };
 
-export default {
+const serviceApi = {
   getAllServices,
   createService,
   updateService,
   removeService,
 };
+
+export default serviceApi;
 export {};

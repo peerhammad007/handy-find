@@ -22,5 +22,5 @@ export const getReviewByBooking = async (bookingId: string) => {
   return res.data as Review;
 };
 
-export default { createReview, getReviewsForService, getReviewsForProvider };
-export {};
+const reviewApi = { createReview, getReviewsForService, getReviewsForProvider };
+export default reviewApi;

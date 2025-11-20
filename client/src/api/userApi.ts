@@ -17,5 +17,6 @@ export const getBookingHistory = async () => {
   return res.data;
 };
 
-export default { getProfile, updateProfile, getBookingHistory };
+const userApi = { getProfile, updateProfile, getBookingHistory };
+export default userApi;
 export {};

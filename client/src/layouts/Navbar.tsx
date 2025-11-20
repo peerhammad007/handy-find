@@ -2,17 +2,6 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-const SERVICES = [
-  { key: 'plumbing', label: 'Plumbing' },
-  { key: 'electrical', label: 'Electrical' },
-  { key: 'cleaning', label: 'Cleaning' },
-  { key: 'carpentry', label: 'Carpentry' },
-];
-
-const CONTACT = {
-  email: 'hello@handyfind.example',
-  phone: '+1 (555) 123-4567'
-};
 
 function Navbar() {
     const { user, token, signOut } = useAuth();

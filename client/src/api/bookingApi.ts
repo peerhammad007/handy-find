@@ -26,5 +26,5 @@ export const updateBookingStatus = async (id: string, status: Booking['status'],
   return res.data as Booking;
 };
 
-export default { createBooking, getBookings, updateBookingStatus };
-export {};
+const bookingApi = { createBooking, getBookings, updateBookingStatus };
+export default bookingApi;

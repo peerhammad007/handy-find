@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import { useNotify } from '../../components/Toast/ToastProvider';
 import { getProfile, updateProfile } from '../../api/userApi';
-import { Link } from 'react-router-dom';
 
 function Profile() {
-    const { user, signOut } = useAuth();
+    const { signOut } = useAuth();
     const { notify } = useNotify();
     const [profile, setProfile] = useState<any>(null);
     const [editing, setEditing] = useState(false);

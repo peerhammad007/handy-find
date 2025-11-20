@@ -58,7 +58,7 @@ function Booking() {
             }
         };
         load();
-    }, [dispatch]);
+    }, [dispatch, user?.role]);
 
     const getItemTime = (item: any): number => {
         if (item?.createdAt) {
