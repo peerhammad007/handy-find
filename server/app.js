@@ -16,6 +16,8 @@ app.use('/api/services', require('./routes/serviceRoutes'));
 app.use('/api/bookings', require('./routes/bookingRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/reviews', require('./routes/reviewRoutes'));
+app.use('/api/uploads', require('./routes/uploadRoutes'));
+app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
 // Error handling middleware
 app.use(require('./middleware/errorMiddleware'));

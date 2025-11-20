@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import { uploadImage } from '../../api/uploadApi';
 
 const Register: React.FC = () => {
   const { register, loading, error } = useAuth();
@@ -26,16 +27,17 @@ const Register: React.FC = () => {
     register({ ...form, profilePhoto });
   };
 
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string;
-      setProfilePhoto(result);
-      setPreview(result);
-    };
-    reader.readAsDataURL(file);
+    setPreview(URL.createObjectURL(file));
+    try {
+      const url = await uploadImage(file);
+      setProfilePhoto(url);
+    } catch (err) {
+      // Optional: surface via toast if available
+      console.error('Upload failed', err);
+    }
   };
 
   return (
