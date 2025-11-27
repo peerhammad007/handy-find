@@ -22,7 +22,7 @@ const Dashboard: React.FC = () => {
         // My services: fetch all services and filter by provider id
         const services = await getAllServices();
         const myServices = services.filter((s: any) => {
-          const providerId = typeof s.provider === 'string' ? s.provider : (s.provider as any)?._id;
+          const providerId = (s.provider as any)?._id;
           return providerId === user._id;
         });
         setMyServicesCount(myServices.length);
@@ -40,7 +40,7 @@ const Dashboard: React.FC = () => {
         }
         setTotalBookings(bookingCount);
 
-        // Avg rating (provider only)
+        // Avg rating: fetch reviews for provider and calculate average
         if (user.role === 'provider') {
           const reviews = await getReviewsForProvider(user._id);
           if (reviews.length > 0) {
