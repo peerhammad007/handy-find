@@ -33,7 +33,7 @@ const Dashboard: React.FC = () => {
         let bookingCount = bookings.length;
         if (user.role === 'provider') {
           const completedForProvider = bookings.filter((b: any) => {
-            const providerId = typeof b.provider === 'string' ? b.provider : (b.provider as any)?._id;
+            const providerId = (b.provider as any)?._id;
             return providerId === user._id && b.status === 'completed';
           });
           bookingCount = completedForProvider.length;
