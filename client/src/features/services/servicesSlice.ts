@@ -35,7 +35,7 @@ const servicesSlice = createSlice({
             state.selectedService = action.payload;
         },
         addService(state, action: PayloadAction<Service>) {
-            state.services.push(action.payload);
+            state.services.unshift(action.payload);
         },
         updateService(state, action: PayloadAction<Service>) {
             const idx = state.services.findIndex(s => s._id === action.payload._id);

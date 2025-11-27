@@ -21,8 +21,17 @@ exports.getServices = async (req, res) => {
     if (priceMin) query.price.$gte = Number(priceMin);
     if (priceMax) query.price.$lte = Number(priceMax);
     // TODO: Add rating filter
-    const services = await Service.find(query).populate('provider', 'name profilePhoto location');
-    // TODO: Add sorting
+    // Sorting: default newest first by createdAt; allow override via sort query (e.g., 'createdAt:asc'|'createdAt:desc')
+    const sortOpt = (() => {
+      if (!sort) return { createdAt: -1 };
+      const [field, dir] = String(sort).split(':');
+      if (field === 'createdAt') return { createdAt: dir === 'asc' ? 1 : -1 };
+      return { createdAt: -1 };
+    })();
+
+    const services = await Service.find(query)
+      .populate('provider', 'name profilePhoto location')
+      .sort(sortOpt);
     res.json(services);
   } catch (err) {
     res.status(500).json({ message: err.message });
