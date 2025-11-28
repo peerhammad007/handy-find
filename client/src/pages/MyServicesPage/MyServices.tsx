@@ -50,7 +50,7 @@ const MyServices: React.FC = () => {
 
   const myServices = user
     ? services.filter(s => {
-        const providerId = typeof s.provider === 'string' ? s.provider : (s.provider as any)?._id;
+        const providerId = (s.provider as any)?._id;
         return providerId === (user as any)?._id;
       })
     : [];
@@ -71,12 +71,7 @@ const MyServices: React.FC = () => {
         serviceableLocations: form.serviceableLocations ? form.serviceableLocations.split(',').map(s => s.trim()) : [],
       };
       const created = await apiCreateService(payload);
-      // Ensure created service has provider populated so it shows immediately in the filtered list.
-      const createdWithProvider = {
-        ...created,
-        provider: created.provider ? created.provider : (user as any),
-      } as Service;
-      dispatch(addService(createdWithProvider));
+      dispatch(addService(created as Service));
       setForm({ title: '', description: '', price: '', priceType: 'hour', category: '', serviceableLocations: '' });
       setShowAdd(false);
     } catch (err) {

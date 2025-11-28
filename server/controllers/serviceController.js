@@ -5,6 +5,7 @@ exports.createService = async (req, res) => {
   try {
     const service = new Service({ ...req.body, provider: req.user.userId });
     await service.save();
+    await service.populate('provider', 'name profilePhoto location');
     res.status(201).json(service);
   } catch (err) {
     res.status(500).json({ message: err.message });
