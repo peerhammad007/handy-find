@@ -1,7 +1,7 @@
 import http from './http';
 import { Booking } from '../types/Booking';
 
-export const createBooking = async (payload: { serviceId: string; date: string; slot: string }) => {
+export const createBooking = async (payload: { serviceId: string; date: string; slot: string }): Promise<Booking> => {
   const res = await http.post(`/bookings`, payload);
   return res.data;
 };
@@ -16,6 +16,3 @@ export const updateBookingStatus = async (id: string, status: Booking['status'],
   const res = await http.put(`/bookings/${id}/status`, payload);
   return res.data;
 };
-
-const bookingApi = { createBooking, getBookings, updateBookingStatus };
-export default bookingApi;
