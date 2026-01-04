@@ -31,7 +31,7 @@ export const useAuth = () => {
         dispatch(loginStart());
         try {
             await registerApi(payload);
-            await loginApi({email: payload.email, password: payload.password});
+            await login({email: payload.email, password: payload.password});
         } catch (err: any) {
             dispatch(loginFailure(getErrorMessage(err)));
         }
