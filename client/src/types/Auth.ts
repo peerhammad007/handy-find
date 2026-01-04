@@ -8,6 +8,7 @@ export interface RegisterPayload {
     location?: string;
     serviceCategories?: string[];
     bio?: string;
+    profilePhoto?: string | null;
 }
 
 export interface LoginPayload {

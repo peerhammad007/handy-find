@@ -11,7 +11,7 @@ const Register: React.FC = () => {
     email: '',
     phone: '',
     password: '',
-    role: 'user',
+    role: 'user' as 'user' | 'provider',
     location: '',
     serviceCategories: [],
     bio: '',

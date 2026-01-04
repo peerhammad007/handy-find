@@ -16,7 +16,7 @@ export const getReviewsForProvider = async (providerId: string): Promise<Review[
   return res.data
 };
 
-export const getReviewByBooking = async (bookingId: string): Promise<Review[]> => {
+export const getReviewByBooking = async (bookingId: string): Promise<Review> => {
   const res = await http.get(`/reviews/booking/${bookingId}`);
   return res.data
 };
