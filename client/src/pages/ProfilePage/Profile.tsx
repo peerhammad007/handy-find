@@ -1,29 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
 import { useNotify } from '../../components/Toast/ToastProvider';
 import { getProfile, updateProfile } from '../../api/userApi';
+import { User } from '../../types/User';
 
 function Profile() {
-    const { signOut } = useAuth();
     const { notify } = useNotify();
-    const [profile, setProfile] = useState<any>(null);
+    const [profile, setProfile] = useState<User | null>(null);
     const [editing, setEditing] = useState(false);
     const [form, setForm] = useState({ name: '', phone: '', location: '', bio: '' });
 
     useEffect(() => {
-        const load = async () => {
-            try {
-                const p = await getProfile();
-                setProfile(p);
-                setForm({ name: p.name || '', phone: p.phone || '', location: p.location || '', bio: p.bio || '' });
-            } catch (err) {
-                // ignore
-            }
-        };
-        load();
+        fetchProfile(); // eslint-disable-next-line
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setForm({ ...form, [e.target.name]: e.target.value });
+    const fetchProfile = async () => {
+        try {
+            const data = await getProfile();
+            setProfile(data);
+            setForm({
+                name: data.name || '',
+                phone: data.phone || '',
+                location: data.location || '',
+                bio: data.bio || '',
+            });
+        } catch {
+            notify('error', 'Failed to load profile');
+        }
+    };
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        const { name, value } = e.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+    };
 
     const handleSave = async () => {
         try {
@@ -70,7 +80,6 @@ function Profile() {
 
                                 <div className="mt-4 flex gap-2 justify-end">
                                     <button onClick={() => setEditing(true)} className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Edit Profile</button>
-                                    <button onClick={() => signOut()} className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-5 py-2 rounded-full font-medium transition-colors">Logout</button>
                                 </div>
                             </div>
                         </div>
