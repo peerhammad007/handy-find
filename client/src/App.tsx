@@ -16,6 +16,7 @@ import Footer from './layouts/Footer';
 import PrivateRoute from './components/PrivateRoute';
 import MyServices from './pages/MyServicesPage/MyServices';
 import ServicesInfo from './components/Info/ServicesInfo';
+import RoleRoute from './components/RoleRoute';
 
 const ErrorPage = () => <div>404 - Page Not Found</div>;
 
@@ -32,12 +33,18 @@ function App() {
           <Route path='/contact-us' element={<ContactUs />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+
+          {/* Authenticated routes (any role) */}
           <Route element={<PrivateRoute />}>
-            <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/services' element={<ServiceListings />} />
-            <Route path='/my-services' element={<MyServices />} />
             <Route path='/booking' element={<Booking />} />
             <Route path='/profile' element={<Profile />} />
+          </Route>
+
+          {/* Provider-only routes */}
+          <Route element={<RoleRoute allowedRoles={['provider']} />}>
+            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/my-services' element={<MyServices />} />
             <Route path='/reviews' element={<Reviews />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
