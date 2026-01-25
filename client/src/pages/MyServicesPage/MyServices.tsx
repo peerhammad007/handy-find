@@ -13,6 +13,7 @@ import {
 } from '../../features/services/servicesSlice';
 import { Service } from '../../types/Service';
 import Input from '../../components/Ui/Input';
+import Pagination from '../../components/Ui/Pagination';
 
 const INITIAL_FORM = { title: '', description: '', price: '', priceType: 'hour', category: '', serviceableLocations: '' };
 const PAGE_SIZE = 6;
@@ -64,27 +65,6 @@ const AddServiceForm = ({ onSubmit }: { onSubmit: (form: ServiceForm) => void; }
         <button type="submit" className="bg-sky-600 hover:bg-sky-700 text-white px-5 py-2 rounded-full font-medium shadow-sm transition-colors">Create Service</button>
       </div>
     </form>
-  );
-};
-
-const Pagination = ({ total, current, onChange }: { total: number; current: number; onChange: (p: number) => void }) => {
-  const pages = Math.ceil(total / PAGE_SIZE);
-  if (pages <= 1) return null;
-
-  return (
-    <div className="mt-6 flex items-center flex-wrap justify-center gap-2">
-      <button onClick={() => onChange(Math.max(1, current - 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors">Prev</button>
-      {Array.from({ length: pages }, (_, i) => i + 1).map(p => (
-        <button
-          key={p}
-          onClick={() => onChange(p)}
-          className={`px-4 py-2 rounded-full font-medium transition-colors ${p === current ? 'bg-sky-600 text-white shadow-sm' : 'bg-white border border-sky-200 text-sky-700 hover:bg-sky-50'}`}
-        >
-          {p}
-        </button>
-      ))}
-      <button onClick={() => onChange(Math.min(pages, current + 1))} className="px-4 py-2 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium transition-colors">Next</button>
-    </div>
   );
 };
 
@@ -164,7 +144,7 @@ const MyServices = () => {
           ))}
         </div>
 
-        <Pagination total={myServices.length} current={currentPage} onChange={setCurrentPage} />
+        <Pagination total={myServices.length} pageSize={PAGE_SIZE} current={currentPage} onChange={setCurrentPage} />
       </div>
     </div>
   );
