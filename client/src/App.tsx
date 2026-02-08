@@ -34,9 +34,13 @@ function App() {
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
 
+          {/* User-only routes */}
+          <Route element={<RoleRoute allowedRoles={['user']} />}>
+            <Route path='/services' element={<ServiceListings />} />
+          </Route>
+
           {/* Authenticated routes (any role) */}
           <Route element={<PrivateRoute />}>
-            <Route path='/services' element={<ServiceListings />} />
             <Route path='/booking' element={<Booking />} />
             <Route path='/profile' element={<Profile />} />
           </Route>
