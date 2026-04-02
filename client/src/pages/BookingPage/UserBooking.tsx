@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import BookingCard from './components/BookingCard';
-import ReviewForm from './components/ReviewForm';
-import { useBooking } from '../../hooks/useBooking';
-import Pagination from '../../components/Ui/Pagination';
+import BookingCard from '../../features/bookings/components/BookingCard';
+import ReviewForm from '../../features/bookings/components/ReviewForm';
+import { useBooking } from '../../features/bookings/hooks/useBooking';
+import Pagination from '../../shared/components/Ui/Pagination';
 
 const PAGE_SIZE = 6;
 

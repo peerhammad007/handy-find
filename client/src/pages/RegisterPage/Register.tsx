@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import useAuth from '../../hooks/useAuth';
-import { useNotify } from '../../components/Toast/ToastProvider';
-import { uploadImage } from '../../api/uploadApi';
-import Input from '../../components/Ui/Input'; // Import your new component
+import useAuth from '../../features/auth/hooks/useAuth';
+import { useNotify } from '../../shared/components/Toast/ToastProvider';
+import { uploadImage } from '../../shared/api/uploadApi';
+import Input from '../../shared/components/Ui/Input';
 
 // --- 1. Zod Schema (Validation Rules) ---
 const registerSchema = z.object({
@@ -49,7 +49,7 @@ const Register = () => {
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    
+
     setPreview(URL.createObjectURL(file)); // Immediate UI feedback
     try {
       const url = await uploadImage(file); // Async upload
@@ -67,31 +67,31 @@ const Register = () => {
         <p className="text-center text-sm text-gray-600 mb-6">Join HandyFind today.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          
-          <Input 
-            {...register('name')} 
-            placeholder="Full Name" 
-            error={errors.name?.message} 
+
+          <Input
+            {...register('name')}
+            placeholder="Full Name"
+            error={errors.name?.message}
           />
-          
-          <Input 
-            {...register('email')} 
-            type="email" 
-            placeholder="Email Address" 
-            error={errors.email?.message} 
+
+          <Input
+            {...register('email')}
+            type="email"
+            placeholder="Email Address"
+            error={errors.email?.message}
           />
-          
-          <Input 
-            {...register('phone')} 
-            placeholder="Phone Number" 
-            error={errors.phone?.message} 
+
+          <Input
+            {...register('phone')}
+            placeholder="Phone Number"
+            error={errors.phone?.message}
           />
-          
-          <Input 
-            {...register('password')} 
-            type="password" 
-            placeholder="Password" 
-            error={errors.password?.message} 
+
+          <Input
+            {...register('password')}
+            type="password"
+            placeholder="Password"
+            error={errors.password?.message}
           />
 
           {/* Native Select */}
@@ -110,18 +110,18 @@ const Register = () => {
             {preview && <img src={preview} alt="preview" className="w-16 h-16 rounded-full mt-2 object-cover" />}
           </div>
 
-          <Input 
-            {...register('location')} 
-            placeholder="Location (Optional)" 
-            error={errors.location?.message} 
+          <Input
+            {...register('location')}
+            placeholder="Location (Optional)"
+            error={errors.location?.message}
           />
 
           {/* Conditional Rendering based on Role */}
           {role === 'provider' && (
-            <Input 
-              {...register('bio')} 
-              placeholder="Tell us about your services..." 
-              error={errors.bio?.message} 
+            <Input
+              {...register('bio')}
+              placeholder="Tell us about your services..."
+              error={errors.bio?.message}
             />
           )}
 
@@ -132,7 +132,7 @@ const Register = () => {
           >
             {loading ? 'Registering...' : 'Register'}
           </button>
-          
+
           {error && <div className="text-red-600 text-center text-sm">{error}</div>}
         </form>
 

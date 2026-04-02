@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import useAuth from '../../hooks/useAuth';
-import { useNotify } from '../../components/Toast/ToastProvider';
-import { getAllServices, createService as apiCreateService, removeService as apiRemoveService } from '../../api/serviceApi';
+import useAuth from '../../features/auth/hooks/useAuth';
+import { useNotify } from '../../shared/components/Toast/ToastProvider';
+import { getAllServices, createService as apiCreateService, removeService as apiRemoveService } from '../../features/services/api/serviceApi';
 import {
   fetchServicesStart,
   fetchServicesSuccess,
   fetchServicesFailure,
   addService,
   deleteService,
-} from '../../features/services/servicesSlice';
-import { Service } from '../../types/Service';
-import Input from '../../components/Ui/Input';
-import Pagination from '../../components/Ui/Pagination';
+} from '../../features/services/store/servicesSlice';
+import { Service } from '../../features/services/types/Service';
+import Input from '../../shared/components/Ui/Input';
+import Pagination from '../../shared/components/Ui/Pagination';
 
 const INITIAL_FORM = { title: '', description: '', price: '', priceType: 'hour', category: '', serviceableLocations: '' };
 const PAGE_SIZE = 6;

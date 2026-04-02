@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '../../features/auth/hooks/useAuth';
 
 const Login: React.FC = () => {
   const { login, loading, error } = useAuth();
@@ -9,7 +9,7 @@ const Login: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    login({email, password});
+    login({ email, password });
   };
 
   return (

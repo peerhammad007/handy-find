@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNotify } from '../../components/Toast/ToastProvider';
-import { getProfile, updateProfile } from '../../api/userApi';
-import { User } from '../../types/User';
+import { useNotify } from '../../shared/components/Toast/ToastProvider';
+import { getProfile, updateProfile } from '../../features/users/api/userApi';
+import { User } from '../../features/users/types/User';
 
 function Profile() {
     const { notify } = useNotify();

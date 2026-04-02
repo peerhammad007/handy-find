@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { loginSuccess } from './features/auth/authSlice';
-import { ToastProvider } from './components/Toast/ToastProvider';
+import { loginSuccess } from './features/auth/store/authSlice';
+import { ToastProvider } from './shared/components/Toast/ToastProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

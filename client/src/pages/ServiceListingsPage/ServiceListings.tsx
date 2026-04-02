@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import ServiceCard from './components/ServiceCard';
-import BookingForm from './components/BookingForm';
-import SearchFilters from './components/SearchFilters';
-import Pagination from '../../components/Ui/Pagination';
-import { useServiceListings } from '../../hooks/useServiceListing';
+import ServiceCard from '../../features/services/components/ServiceCard';
+import BookingForm from '../../features/services/components/BookingForm';
+import SearchFilters from '../../features/services/components/SearchFilters';
+import Pagination from '../../shared/components/Ui/Pagination';
+import { useServiceListings } from '../../features/services/hooks/useServiceListing';
 
 const PAGE_SIZE = 6;
 

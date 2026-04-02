@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import useAuth from '../../hooks/useAuth';
-import { getReviewsForProvider } from '../../api/reviewApi';
+import useAuth from '../../features/auth/hooks/useAuth';
+import { getReviewsForProvider } from '../../features/reviews/api/reviewApi';
 
 function Reviews() {
     const { user } = useAuth();

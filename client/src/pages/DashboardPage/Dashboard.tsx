@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { getAllServices } from '../../api/serviceApi';
-import { getBookings } from '../../api/bookingApi';
-import { getReviewsForProvider } from '../../api/reviewApi';
+import useAuth from "../../features/auth/hooks/useAuth";
+import { getAllServices } from '../../features/services/api/serviceApi';
+import { getBookings } from '../../features/bookings/api/bookingApi';
+import { getReviewsForProvider } from '../../features/reviews/api/reviewApi';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
