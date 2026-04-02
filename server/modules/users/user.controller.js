@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const Booking = require('../models/Booking');
+const User = require('./user.model');
+const Booking = require('../bookings/booking.model');
 
 exports.getProfile = async (req, res) => {
   try {
