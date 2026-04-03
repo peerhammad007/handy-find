@@ -2,6 +2,14 @@ const User = require("../users/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+const getJwtSecret = () => {
+  if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  return process.env.JWT_SECRET;
+};
+
 exports.register = async (req, res) => {
   try {
     const {
@@ -65,7 +73,7 @@ exports.login = async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, role: user.role },
-      process.env.jwt_SECRET,
+      getJwtSecret(),
       { expiresIn: "7d" },
     );
     const userResponse = user.toObject();
